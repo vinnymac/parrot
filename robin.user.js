@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Robin Grow (modified multichat)
+// @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.15
+// @version      2.16
 // @description  Try to take over the world!
 // @author       /u/_vvvv_
 // @include      https://www.reddit.com/robin*
@@ -28,6 +28,16 @@
         }
         return prepend_str + str;
     };
+
+    String.prototype.rpad = function(padString, length) {
+        var str = this;
+        var prepend_str = "";
+        for (var i = str.length; i < length; i++) {
+            prepend_str = padString + prepend_str;
+        }
+        return str + prepend_str;
+    };
+
 
     function tryHide(){
     if(settings.hideVote){
@@ -93,9 +103,9 @@
         channel_array = getChannelList();
         source = String(source).toLowerCase();
 
-        for (idx = 0; idx < channel_array.length; idx++)
-        {
-            var current_chan = channel_array[idx];
+        var idx = channel_array.length;
+        while(idx-- > 0) {
+            var current_chan = String(channel_array[idx ]).toLowerCase().trim();
 
             if(source.startsWith(current_chan)) {
                 return {
@@ -290,6 +300,7 @@
     Settings.addBool("findAndHideSpam", "Remove messages that have been sent more than 3 times", true);
     Settings.addInput("maxprune", "Max messages before pruning", "500");
     Settings.addInput("fontsize", "Chat font size", "12");
+    Settings.addBool("alignment", "Username alignment (false = left; true = right)", true);
     Settings.addInput("username_bg", "Background color of usernames (leave blank to disable)", "");
     Settings.addInput("channel", "Channel filter (separate rooms with commas for multi-listening; names are case-insensitive)", "", buildDropdown);
     Settings.addBool("filterChannel", "Filter by channels (check = on; uncheck = off)", true);
@@ -302,7 +313,7 @@
     if (typeof GM_info !== "undefined") {
         versionString = " - v" + GM_info.script.version;
     }
-    $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--report" style="text-align:center;"><a target="_blank" href="https://github.com/5a1t/robin-grow">robin-grow - soKukunelits fork - ' + versionString + '</a></div>');
+    $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--report" style="text-align:center;"><a target="_blank" href="https://github.com/5a1t/robin-grow">parrot - soKukunelits fork - ' + versionString + '</a></div>');
     // Settings end
 
     var timeStarted = new Date();
@@ -558,6 +569,17 @@
         listMutedUsers();
     });
 
+    // Copy cliked username into textarea /u/tW4r based on /u/verox-'s Individual mute button
+    $('body').on('contextmenu', ".robin--username", function (event) {
+        // Prevent context-menu from showing up
+        event.preventDefault();
+        // Get clicked username and previuos input source
+        var username = String($(this).text()).trim();
+        var source = String($(".text-counter-input").val());
+        // Focus textarea and set the value of textarea
+        $(".text-counter-input").focus().val("").val(source + " " + username + " ");
+    });
+
     $("#settingContent").append("<span style='font-size:"+settings.fontsize+"px;text-align:center;'>Muted Users (click to unmute)</label>");
     $("#settingContent").append("<div id='blockedUserList' class='robin-chat--sidebar-widget robin-chat--user-list-widget'></div>");
 
@@ -756,7 +778,9 @@
                     $user.css("background",  String(settings['username_bg']));
                 }
 
-                $user.html($user.html().lpad('&nbsp;', 20));
+                var alignedUser = settings['alignment'] ? $user.html().lpad('&nbsp;', 20) : $user.html().rpad('&nbsp;', 20);
+
+                $user.html(alignedUser);
                 $user.css("font-family", '"Lucida Console", Monaco, monospace').css("font-size", settings.fontsize+"px");
                 $message.css("font-family", '"Lucida Console", Monaco, monospace').css("font-size", settings.fontsize+"px");
 
@@ -812,7 +836,7 @@
 
                 if(settings.filterChannel) {
                     if(results_chan.has) {
-						messageText = messageText.substring(results_chan.name.length).trim();
+                        messageText = messageText.substring(results_chan.name.length).trim();
                         $message.text(messageText);
                     }
 
