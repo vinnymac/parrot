@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.73
+// @version      2.74
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
@@ -164,7 +164,7 @@
                     '</div>' +
                 '</div>'
             );
-			
+
 			// Standing container
  			$("#settingContainer").before(
  			    '<div class="robin-chat--sidebar" style="display:none;" id="standingsContainer">' +
@@ -192,13 +192,13 @@
                 tryHide();
                 update();
             });
-			
+
 			$("#standingsBtn").on("click", function openStandings() {
  				$(".robin-chat--sidebar").hide();
 				startStandings();
 				$("#standingsContainer").show();
 			});
-			
+
 			$("#closeStandingsBtn").on("click", function closeStandings() {
  				$(".robin-chat--sidebar").show();
  				stopStandings();
@@ -317,8 +317,8 @@
         console.log("chat cleared!");
         getChannelMessageList(selectedChannel).empty();
     }
-	
-	
+
+
 	function grabStandings() {
 		var standings;
 		$.ajax({
@@ -343,14 +343,14 @@
 			dataType: 'xml'
 		});
 	}
-	
+
 	var standingsInterval = 0;
 	function startStandings() {
 		stopStandings();
 		standingsInterval = setInterval(grabStandings, 120000);
 		grabStandings();
 	}
-	
+
 	function stopStandings() {
 	if (standingsInterval){
 			clearInterval(standingsInterval);
