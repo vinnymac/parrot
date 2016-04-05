@@ -320,6 +320,9 @@
     Settings.addInput("channel", "<label>Channel Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
     Settings.addBool("filterChannel", "Filter by channels", true);
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
+    
+    Settings.addBool("enableAdvancedNaviOptions", "Enables the advanced options to remap navigation keys, page will refresh on click", false, function(){ location.reload(); });
+    
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
