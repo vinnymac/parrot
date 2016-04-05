@@ -1190,12 +1190,12 @@
         var rKeycode = 37;
         
         if (!settings.enableQuickTabNavigation) {
-            if !((e.metaKey || e.ctrlKey) && e.shiftKey)) {
+            if (!((e.metaKey || e.ctrlKey) && e.shiftKey)) {
                 return;
             }
         }
         else {          
-            if eval(!generateKeyCodeEval()) {
+            if (!eval(generateKeyCodeEval())) {
                 return;
             }
             else {
