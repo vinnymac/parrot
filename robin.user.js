@@ -412,6 +412,13 @@
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
 
+
+    Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
+    Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
+    Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
+    Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", false);
+    Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
+
     Settings.addBool("enableTabComplete", "Tab Autocomplete usernames", true);
     Settings.addBool("enableQuickTabNavigation", "Keyboard channel-tabs navigation", true);
     Settings.addBool("enableAdvancedNaviOptions", "<label>Keyboard navigation key remapping<br><br><span>FOR ADVANCED USERS ONLY</span><br>Window will refresh on click", false, function(){ location.reload(); });
@@ -420,12 +427,6 @@
         Settings.addInput("quickTabNaviKeyLeft", "<label>Navigate left tab final key code</label>","37");
         Settings.addInput("quickTabNaviKeyRight", "<label>Navigate right tab final key code</label>","39");
     }
-
-    Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
-    Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
-    Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
-    Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", false);
-    Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
 
     $("#settingContent").append("<div class='robin-chat--sidebar-widget robin-chat--notification-widget'><label id='blockedUserContainer'>Muted Users (click to unmute)</label>");
     $("#blockedUserContainer").append("<div id='blockedUserList' class='robin-chat--sidebar-widget robin-chat--user-list-widget'></div>");
