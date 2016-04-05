@@ -108,14 +108,40 @@
         return channelArray;
     }
 
-    function hasChannel(source)
+    function hasChannel(source, shall_trim)
     {
         channel_array = getChannelList();
-        source = String(source).toLowerCase();
+        source = shall_trim ? String(source).toLowerCase().trim() : String(source).toLowerCase();
 
         for (idx = 0; idx < channel_array.length; idx++)
         {
-            var current_chan = channel_array[idx];
+            var current_chan = shall_trim ? channel_array[idx].trim() : channel_array[idx];
+
+            if(source.startsWith(current_chan.toLowerCase())) {
+                return {
+                    name: current_chan,
+                    has: true,
+                    index: idx
+                };
+            }
+        }
+
+        return {
+            name: "",
+            has: false,
+            index: 0
+        };
+    }
+
+    function hasChannelFromList(source, channels, shall_trim)
+    {
+
+        channel_array = channels;
+        source = shall_trim ? String(source).toLowerCase().trim() : String(source).toLowerCase();
+
+        for (idx = 0; idx < channel_array.length; idx++)
+        {
+            var current_chan = shall_trim ? channel_array[idx].trim() : channel_array[idx];
 
             if(source.startsWith(current_chan.toLowerCase())) {
                 return {
@@ -305,12 +331,13 @@
             $("#settingContent").append('<div id="robinDesktopNotifier" class="robin-chat--sidebar-widget robin-chat--notification-widget"><label>' + description + '</label><input type="text" name="setting-' + name + '"></div>');
             $("input[name='setting-" + name + "']").prop("defaultValue", defaultSetting)
                 .on("change", function() {
-                settings[name] = $(this).val();
-                Settings.save(settings);
 
-                if(callback) {
-                    callback();
-                }
+                    settings[name] = String($(this).val());
+                    Settings.save(settings);
+
+                    if(callback) {
+                        callback();
+                    }
             });
             settings[name] = defaultSetting;
         },
@@ -407,8 +434,11 @@
     Settings.addInput("fontstyle", "Font Style (default Consolas)", "");
     Settings.addBool("alignment", "Right align usernames", true);
     Settings.addInput("username_bg", "Custom background color on usernames", "");
-    Settings.addInput("channel", "<label>Channel Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
-    Settings.addBool("filterChannel", "Apply channel filters to global chat", true, function() { buildDropdown(); });
+
+    Settings.addBool("filterChannel", "Apply channel filters to global channel", true, function() { buildDropdown(); });
+    Settings.addInput("channel", "<label>Channel Listing<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
+    Settings.addInput("channel_exclude", "<label>Channel Exclusion Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li><strong>List of channels to exclude from Global channel (e.g. trivia channels)</strong></li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "");
+
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
 
@@ -1100,6 +1130,17 @@
                 var thisUser = $(jq[0].children && jq[0].children[1]).text();
                 var $message = $(jq[0].children && jq[0].children[2]);
                 var messageText = $message.text();
+
+
+
+                var exclude_list = String(settings.channel_exclude).split(",");
+                var results_chan_exclusion = hasChannelFromList(messageText, exclude_list, true);
+
+                if(exclude_list.length > 0, String(settings.channel_exclude).trim().length > 0 && results_chan_exclusion.has) {
+                    $message = null;
+                    $(jq[0]).remove();
+                    return;
+                }
 
                 if(String(settings['username_bg']).length > 0) {
                     $user.css("background",  String(settings['username_bg']));
