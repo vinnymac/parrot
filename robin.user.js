@@ -1165,6 +1165,25 @@
     });
 
     // ctrl + shift + (left | right)
+    
+    function generateKeyCodeEval() {
+        if (settings.enableAdvancedNaviOptions) {
+            var splitChord = settings.quickTabNaviKeysChord.split(",");
+            
+            //sanitise before eval
+            for (i=0; i < splitChord.length; i++) {
+                splitChord[i] = splitChord[i].replace(/([^0-9\|&!])/g,'');
+            }
+            
+            joinedEval = "(e.keycode == (" + splitChord.join(")) && (e.keycode == (") + "))";
+            
+            return joinedEval;
+        }
+        else {
+            return false; 
+        }
+    }
+    
     $(document).keydown(function(e) {
 
         if(!((e.metaKey || e.ctrlKey) && e.shiftKey)) {
