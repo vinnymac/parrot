@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.74
+// @version      2.75
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
@@ -1153,17 +1153,14 @@
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
                     moveChannelMessage(selectedChannel, jq[0]);
 
-                if (settings.filterChannel) {
-                    if(results_chan.has) {
-                        messageText = messageText.substring(results_chan.name.length).trim();
-                        $message.text(messageText);
-                    }
-
-                    $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
-                        .css("font-size", "12px")
-                        .insertAfter($timestamp);
+                if(results_chan.has) {
+                    messageText = messageText.substring(results_chan.name.length).trim();
+                    $message.text(messageText);
                 }
 
+                $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
+                    .css("font-size", "12px")
+                    .insertAfter($timestamp);
                 // DO NOT REMOVE THIS LINE
                 convertTextToSpecial(messageText, jq[0]);
 
