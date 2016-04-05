@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.76
+// @version      2.77
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
@@ -1054,6 +1054,10 @@
         updateMessage();
     }
 
+    $('.robin-chat--header').click(function() {
+        $(".robin-chat--sidebar").toggleClass("sidebarminimized");
+    });
+
     var myObserver = new MutationObserver(mutationHandler);
     //--- Add a target node to the observer. Can only add one node at a time.
     // XXX Shou: we should only need to watch childList, more can slow it down.
@@ -1407,5 +1411,15 @@ GM_addStyle(" \
     } \
 	#standingsTable table {width: 100%} \
 	#standingsTable table th {font-weight: bold} \
+    .robin-chat--sidebar.sidebarminimized {display: none; } \
+    #robinChannelList {         \
+        width: 72%;   \
+        top: 105px;   \
+    }  \
+    ul#robinChannelList a { \
+    font-size:1em; \
+    padding:2px 30px ; \
+    width:auto; \
+    } \
 ");
 })();
