@@ -1054,6 +1054,10 @@
         updateMessage();
     }
 
+    $('.robin-chat--header').click(function() {
+        $(".robin-chat--sidebar").toggleClass("sidebarminimized");
+    });
+
     var myObserver = new MutationObserver(mutationHandler);
     //--- Add a target node to the observer. Can only add one node at a time.
     // XXX Shou: we should only need to watch childList, more can slow it down.
@@ -1407,5 +1411,15 @@ GM_addStyle(" \
     } \
 	#standingsTable table {width: 100%} \
 	#standingsTable table th {font-weight: bold} \
+    .robin-chat--sidebar.sidebarminimized {display: none; } \
+    #robinChannelList {         \
+        width: 72%!important;   \
+        top: 105px!important;   \
+    }  \
+    ul#robinChannelList a { \
+    font-size:1em!important; \
+    padding:2px 30px!important; \
+    width:auto!important; \
+    } \
 ");
 })();
