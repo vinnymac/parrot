@@ -785,7 +785,6 @@
                             changes = true;
                         }
 						if(bttvEmotes.hasOwnProperty(key)){
-						https://cdn.betterttv.net/emote/566c9fde65dbbdab32ec053e/1x
                             split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
                             changes = true;
                         }
