@@ -149,7 +149,7 @@
                 '</div>'
             );
 
-            $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><ul><li>Left click usernames to mute.</li><li>Right click usernames to copy to message.<li>Tab autocompletes usernames in the message box.</li><li>Ctrl+shift+left/right switches between channel tabs.</li><li>Report any bugs or issues <a href="https://github.com/5a1t/parrot/issues/new"><strong>HERE<strong></a></li><li>Created for soKukuneli chat (T16)</li></ul></div>');
+            $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><ul><li>Left click usernames to mute.</li><li>Right click usernames to copy to message.<li>Tab autocompletes usernames in the message box.</li><li>Ctrl+shift+left/right switches between channel tabs.</li><li>Up/down in the message box cycles through sent message history.</li><li>Report any bugs or issues <a href="https://github.com/5a1t/parrot/issues/new"><strong>HERE<strong></a></li><li>Created for soKukuneli chat (T16)</li></ul></div>');
 
             $("#robinDesktopNotifier").detach().appendTo("#settingContent");
 
@@ -313,6 +313,7 @@
     // Settings.addBool("findAndHideSpam", "Remove messages that have been sent more than 3 times", false);
     Settings.addBool("force_scroll", "Force scroll to bottom", false);
     Settings.addInput("maxprune", "Max messages before pruning", "500");
+	Settings.addInput("maxhistory", "Sent messages kept in history", "50");
     Settings.addInput("fontsize", "Chat font size", "12");
     Settings.addInput("fontstyle", "Font Style (default Consolas)", "");
     Settings.addBool("alignment", "Right align usernames", true);
@@ -861,9 +862,15 @@
 		
 		pastMessageQueue.unshift(value);
 		
-		// Currently only storing the past 50 messages. 
-		if (pastMessageQueue.length > 50)
+		// Currently only storing the past 50 messages.
+		var maxhistory = parseInt(settings.maxhistory || "50", 10);
+		if (maxhistory < 0 || isNaN(maxhistory)) {
+			maxhistory = 50;
+		}
+		
+		while (pastMessageQueue.length > maxhistory) {
 			pastMessageQueue.pop();
+		}
 	}
 	
 	function onMessageBoxSubmit()
