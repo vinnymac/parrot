@@ -322,11 +322,11 @@
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     
     Settings.addBool("enableAdvancedNaviOptions", "Enables the advanced options to remap navigation keys, page will refresh on click", false, function(){ location.reload(); });
-    
+    if (enableAdvancedNaviOptions) {
         Settings.addInput("quickTabNaviKeysChord", "<label>Change the key codes used for navigating between tabs<ul><li><b>WARNING: FOR ADVANCED USERS ONLY. DO NOT MODIFY</b></li><li>Specify a comma separated list of keys to be held down for tab navigation, the boolean comparators '!' and '||' and can be used to build basic logical expressions</li><li>See <a href='https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode' target='_blank'>Mozilla.org's documentation</a> for list of key codes</li></ul></label>","17||224,16");
         Settings.addInput("quickTabNaviKeyLeft", "<label><ul><li>The key code for the final key to navigate left a tab</li></ul></label>","37");
         Settings.addInput("quickTabNaviKeyRight", "<label><ul><li>The key code for the final key to navigate right a tab</li></ul></label>","39");
-    
+    }
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
