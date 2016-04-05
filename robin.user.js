@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.71
 // @description  Recreate Slack on top of an 8 day Reddit project.
-// @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
+// @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
 // @updateURL    https://github.com/5a1t/parrot/raw/master/robin.user.js
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -321,14 +321,14 @@
     Settings.addBool("filterChannel", "Filter by channels", true);
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     
-    Settings.addBool("enableTabComplete", "Auto completes username when pressing tab", true);
-    Settings.addBool("enableQuickTabNavigation", "Enable the shortcut to switch between tabs", true);
+    Settings.addBool("enableTabComplete", "Tab Autocomplete usernames", true);
+    Settings.addBool("enableQuickTabNavigation", "Keyboard channel-tabs navigation", true);
     
-    Settings.addBool("enableAdvancedNaviOptions", "Enables the advanced options to remap navigation keys, page will refresh on click", false, function(){ location.reload(); });
+    Settings.addBool("enableAdvancedNaviOptions", "<label>Keyboard navigation key remapping<br><br><span>FOR ADVANCED USERS ONLY</span><br>Window will refresh on click", false, function(){ location.reload(); });
     if (settings.enableAdvancedNaviOptions) {
-        Settings.addInput("quickTabNaviKeysChord", "<label>Change the key codes used for navigating between tabs<ul><li><b>WARNING: FOR ADVANCED USERS ONLY. DO NOT MODIFY</b></li><li>Specify a comma separated list of keys to be held down for tab navigation, the boolean comparators '!' and '||' and can be used to build basic logical expressions</li><li>See <a href='https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode' target='_blank'>Mozilla.org's documentation</a> for list of key codes</li></ul></label>","17||224,16");
-        Settings.addInput("quickTabNaviKeyLeft", "<label><ul><li>The key code for the final key to navigate left a tab</li></ul></label>","37");
-        Settings.addInput("quickTabNaviKeyRight", "<label><ul><li>The key code for the final key to navigate right a tab</li></ul></label>","39");
+        Settings.addInput("quickTabNaviKeysChord", "<ul><li><b>WARNING: FOR ADVANCED USERS ONLY. DO NOT MODIFY</b></li><li>Specify a comma separated list of keys to be held down for tab navigation, the boolean comparators '!' and '||' and can be used to build basic logical expressions</li><li>See <a href='https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode' target='_blank'>Mozilla.org's documentation</a> for list of key codes</li></ul><label>Chorded key-code combination</label>","17||224,16");
+        Settings.addInput("quickTabNaviKeyLeft", "<label>Navigate left tab final key code</label>","37");
+        Settings.addInput("quickTabNaviKeyRight", "<label>Navigate right tab final key code</label>","39");
     }
     
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
@@ -1164,8 +1164,6 @@
         GOTO_BOTTOM = true;
     });
 
-    // ctrl + shift + (left | right)
-    
     function generateKeyCodeEval() {
         if (settings.enableAdvancedNaviOptions) {
             var splitChord = settings.quickTabNaviKeysChord.split(",");
@@ -1187,7 +1185,7 @@
     $(document).keydown(function(e) {
         if (!settings.enableQuickTabNavigation) return; // Is quicknav enabled
         
-        console.log(e.keyCode);
+        //console.log(e.keyCode);
         
         var lKeycode = 37; 
         var rKeycode = 39; // set the keycodes to default
@@ -1205,8 +1203,17 @@
                 return;
             }
         }
+        
+        if (e.keyCode == lKeycode) { 
+            var newChanIdx = selectedChannel - 1;
 
-        if (e.keyCode == lKeycode) { // left channel
+            if (newChanIdx <= -2) {
+                newChanIdx = channelList.length - 1;
+            }
+            selectChannel(newChanIdx);
+        }
+        
+        if (e.keyCode == rKeycode) {
             var newChanIdx = selectedChannel + 1;
 
             if (newChanIdx == channelList.length) {
@@ -1215,14 +1222,7 @@
             selectChannel(newChanIdx);
         }
 
-        if (e.keyCode == rKeycode) { // right channel
-            var newChanIdx = selectedChannel - 1;
 
-            if (newChanIdx <= -2) {
-                newChanIdx = channelList.length - 1;
-            }
-            selectChannel(newChanIdx);
-        }
     });
 
 GM_addStyle(" \
