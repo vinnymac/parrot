@@ -896,6 +896,7 @@
         var maxhistorysize = parseInt(settings.messageHistorySize || "50", 10);
         if (maxhistorysize < 0 || isNaN(maxhistorysize)) {
             maxhistorysize = 50;
+        }
 
         while (pastMessageQueue.length > maxhistorysize) {
             pastMessageQueue.pop();
