@@ -1186,10 +1186,10 @@
     
     $(document).keydown(function(e) {
 
-        var lKeycode = 39;
-        var rKeycode = 37;
+        var lKeycode = 37;
+        var rKeycode = 39;
         
-        if (!settings.enableQuickTabNavigation) {
+        if (settings.enableQuickTabNavigation) {
             if (!((e.metaKey || e.ctrlKey) && e.shiftKey)) {
                 return;
             }
