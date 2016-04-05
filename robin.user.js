@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.62
+// @version      2.63
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
 // @include      https://www.reddit.com/robin*
@@ -772,8 +772,9 @@
                     var split = messageText.split(' ');
                     var changes = false;
                     for (var i=0; i < split.length; i++) {
-                        if(emotes.hasOwnProperty((split[i]).toLowerCase())){
-                            split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[split[i]].image_id+"/1.0\">";
+                        var key = (split[i]).toLowerCase();
+                        if(emotes.hasOwnProperty(key)){
+                            split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
                             changes = true;
                         }
                     }
