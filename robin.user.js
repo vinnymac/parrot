@@ -914,8 +914,6 @@
 		
 		$("#robinMessageTextAlt").val(sourceAlt);
 		updateMessage();
-
-        return;
     }
 
     var myObserver = new MutationObserver(mutationHandler);
