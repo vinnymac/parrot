@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.67
+// @version      2.69
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
 // @include      https://www.reddit.com/robin*
@@ -138,7 +138,7 @@
             $robinVoteWidget.prepend("<div class='addon'><div class='usercount robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend("<div class='addon'><div class='timeleft robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap" style="padding-top:-10px;"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
-            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;><a target="_blank" href="https://github.com/5a1t/parrot"><div class="robin-chat--vote" font-size: 18px;"><img src="http://i.imgur.com/ch75qF2.png" display:inline-block; vertical-align:middle; style="width:15px;height:15px;">Parrot<p></div>soKukunelits fork - ' + versionString + '</p></a></div>');
+            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;"><a target="_blank" href="https://github.com/5a1t/parrot"><div class="robin-chat--vote font-size: 18px;"><img src="http://i.imgur.com/ch75qF2.png"  style="display:inline-block; vertical-align:middle;width:15px;height:15px;">Parrot</div><p style="font-size:12px;">soKukunelits fork ~ ' + versionString + '</p></a></div>');
 
             // Setting container
             $(".robin-chat--sidebar").before(
@@ -313,7 +313,6 @@
     // Settings.addBool("findAndHideSpam", "Remove messages that have been sent more than 3 times", false);
     Settings.addBool("force_scroll", "Force scroll to bottom", false);
     Settings.addInput("maxprune", "Max messages before pruning", "500");
-	Settings.addInput("maxhistory", "Sent messages kept in history", "50");
     Settings.addInput("fontsize", "Chat font size", "12");
     Settings.addInput("fontstyle", "Font Style (default Consolas)", "");
     Settings.addBool("alignment", "Right align usernames", true);
@@ -323,6 +322,7 @@
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
+    Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
 
     $("#settingContent").append("<div class='robin-chat--sidebar-widget robin-chat--notification-widget'><label id='blockedUserContainer'>Muted Users (click to unmute)</label>");
     $("#blockedUserContainer").append("<div id='blockedUserList' class='robin-chat--sidebar-widget robin-chat--user-list-widget'></div>");
@@ -847,80 +847,78 @@
         else
             dest.val(chanName + " " + source);
     }
-	
-	var pastMessageQueue = [];
-	var pastMessageQueueIndex = 0;
-	var pastMessageTemp = "";
-	function updatePastMessageQueue()
-	{
-		pastMessageQueueIndex = 0;
-		pastMessageTemp = "";
-		var value = $("#robinMessageTextAlt").val();
-		
-		if (!value || (pastMessageQueue.length > 0 && value == pastMessageQueue[0]))
-			return;
-		
-		pastMessageQueue.unshift(value);
-		
-		// Currently only storing the past 50 messages.
-		var maxhistory = parseInt(settings.maxhistory || "50", 10);
-		if (maxhistory < 0 || isNaN(maxhistory)) {
-			maxhistory = 50;
-		}
-		
-		while (pastMessageQueue.length > maxhistory) {
-			pastMessageQueue.pop();
-		}
-	}
-	
-	function onMessageBoxSubmit()
-	{
-		updatePastMessageQueue();
-		$("#robinMessageTextAlt").val("");
-	}
+
+    var pastMessageQueue = [];
+    var pastMessageQueueIndex = 0;
+    var pastMessageTemp = "";
+    function updatePastMessageQueue()
+    {
+        pastMessageQueueIndex = 0;
+        pastMessageTemp = "";
+        var value = $("#robinMessageTextAlt").val();
+
+        if (!value || (pastMessageQueue.length > 0 && value == pastMessageQueue[0]))
+            return;
+
+        pastMessageQueue.unshift(value);
+
+        var maxhistorysize = parseInt(settings.messageHistorySize || "50", 10);
+        if (maxhistorysize < 0 || isNaN(maxhistorysize)) {
+            maxhistorysize = 50;
+
+        while (pastMessageQueue.length > maxhistorysize) {
+            pastMessageQueue.pop();
+        }
+    }
+
+    function onMessageBoxSubmit()
+    {
+        updatePastMessageQueue();
+        $("#robinMessageTextAlt").val("");
+    }
 
     function onMessageBoxKeyUp(e)
     {
-		var key = e.keyCode || e.which;
-		if (key != 9 && key != 38 && key != 40)
-			return;
-		
-		e.preventDefault();
-		e.stopPropagation();
-		e.stopImmediatePropagation();
+        var key = e.keyCode || e.which;
+        if (key != 9 && key != 38 && key != 40)
+            return;
 
-		var source = $("#robinMessageText").val();
-		var sourceAlt = $("#robinMessageTextAlt").val();
-		var chanName = selChanName();
-		
-		// Tab - Auto Complete
-		if (key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
-			sourceAlt = source.substring(chanName.length).trim();
-			$("#robinMessageTextAlt").val(sourceAlt);
-			return;
-		}
-		
-		// Up Arrow - Message History
-		if (key == 38 && pastMessageQueue.length > pastMessageQueueIndex) {
-			if (pastMessageQueueIndex === 0) {
-				pastMessageTemp = sourceAlt;
-			}
-			
-			sourceAlt = pastMessageQueue[pastMessageQueueIndex++];
-		}
-		// Down Arrow - Message History
-		else if (key == 40 && pastMessageQueueIndex > 0) {
-			pastMessageQueueIndex--;
-			
-			if (pastMessageQueueIndex === 0) {
-				sourceAlt = pastMessageTemp;
-			} else {
-				sourceAlt = pastMessageQueue[pastMessageQueueIndex - 1];
-			}
-		}
-		
-		$("#robinMessageTextAlt").val(sourceAlt);
-		updateMessage();
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        var source = $("#robinMessageText").val();
+        var sourceAlt = $("#robinMessageTextAlt").val();
+        var chanName = selChanName();
+
+        // Tab - Auto Complete
+        if (key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
+            sourceAlt = source.substring(chanName.length).trim();
+            $("#robinMessageTextAlt").val(sourceAlt);
+            return;
+        }
+
+        // Up Arrow - Message History
+        if (key == 38 && pastMessageQueue.length > pastMessageQueueIndex) {
+            if (pastMessageQueueIndex === 0) {
+                pastMessageTemp = sourceAlt;
+            }
+
+            sourceAlt = pastMessageQueue[pastMessageQueueIndex++];
+        }
+        // Down Arrow - Message History
+        else if (key == 40 && pastMessageQueueIndex > 0) {
+            pastMessageQueueIndex--;
+
+            if (pastMessageQueueIndex === 0) {
+                sourceAlt = pastMessageTemp;
+            } else {
+                sourceAlt = pastMessageQueue[pastMessageQueueIndex - 1];
+            }
+        }
+
+        $("#robinMessageTextAlt").val(sourceAlt);
+        updateMessage();
     }
 
     var myObserver = new MutationObserver(mutationHandler);
