@@ -335,7 +335,7 @@
     Settings.addInput("channel", "<label>Channel Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
     Settings.addBool("filterChannel", "Apply channel filters to global chat", true);
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
-    Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
+    Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
     Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", false);
@@ -661,15 +661,22 @@
     var colors = ['rgba(255,0,0,0.1)','rgba(0,255,0,0.1)','rgba(0,0,255,0.1)', 'rgba(0,255,255,0.1)','rgba(255,0,255,0.1)', 'rgba(255,255,0,0.1)'];
 
 
-    //twitch emotes
+	//Emotes by ande_
+    //Normal Twitch emotes
     var emotes = {};
-    $.getJSON("https://twitchemotes.com/api_cache/v2/global.json", function( data ) {
+    $.getJSON("https://twitchemotes.com/api_cache/v2/global.json", function(data) {
         emotes = data.emotes;
-        console.log(emotes);
-
         for(var prop in emotes){
             emotes[prop.toLowerCase()] = emotes[prop];
         }
+    });
+	
+	//BetterTwitchTV emotes
+	var bttvEmotes = {};
+	$.getJSON("https://api.betterttv.net/2/emotes", function(data) {
+		data.emotes.forEach(function(emote){
+			bttvEmotes[emote.code.toLowerCase()] = emote.id;
+		});
     });
 
     // credit to wwwroth for idea (notification audio)
@@ -822,6 +829,10 @@
                         var key = (split[i]).toLowerCase();
                         if(emotes.hasOwnProperty(key)){
                             split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
+                            changes = true;
+                        }
+						if(bttvEmotes.hasOwnProperty(key)){
+                            split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
                             changes = true;
                         }
                     }
