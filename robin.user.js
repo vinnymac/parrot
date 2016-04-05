@@ -687,13 +687,15 @@
         var username = String($(this).text()).trim();
         var clickedUser = mutedList.indexOf(username);
 
+        var $userNames = $(".robin--username:contains(" + username + ")");
+
         if (clickedUser == -1) {
             // Mute our user.
             mutedList.push(username);
-            this.style.textDecoration = "line-through";
+            $userNames.css({textDecoration: "line-through"});
         } else {
             // Unmute our user.
-            this.style.textDecoration = "none";
+            $userNames.css({textDecoration: "none"});
             mutedList.splice(clickedUser, 1);
         }
 
