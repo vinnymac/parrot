@@ -935,7 +935,7 @@
         var chanName = selChanName();
 
         // Tab - Auto Complete
-        if (key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
+        if (enableTabComplete && key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
             sourceAlt = source.substring(chanName.length).trim();
             $("#robinMessageTextAlt").val(sourceAlt);
             return;
