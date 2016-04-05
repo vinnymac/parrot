@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.65
+// @version      2.67
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
 // @include      https://www.reddit.com/robin*
@@ -853,6 +853,7 @@
 
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
 
         var source = $("#robinMessageText").val();
         var sourceAlt = $("#robinMessageTextAlt").val();
@@ -1039,7 +1040,17 @@
     $("#robinMessageText").css("display", "none");
     // Alternate message input box (doesn't show the channel prefixes)
     $("#robinMessageTextAlt").on("input", function() { updateMessage(); });
-    $("#robinMessageTextAlt").on("keyup", function(e) { tabAutoComplete(e); });
+    $("#robinMessageTextAlt")
+        .on("keydown", function(e) {
+
+            if ((e.keyCode || e.which) != 9) return;
+
+            e.preventDefault();
+            // e.stopPropagation();
+            // e.stopImmediatePropagation();
+            // return false;
+        })
+        .on("keyup", function(e) { tabAutoComplete(e); });
 
     // Send message button
     $("#robinSendMessage").append('<div onclick={$(".text-counter-input").submit();} class="robin-chat--vote" id="sendBtn">Send Message</div>'); // Send message
