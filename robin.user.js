@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.70
 // @description  Recreate Slack on top of an 8 day Reddit project.
-// @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
+// @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
 // @updateURL    https://github.com/5a1t/parrot/raw/master/robin.user.js
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -322,6 +322,8 @@
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
+	Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", false);
+    Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds)", "300");
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
 
     $("#settingContent").append("<div class='robin-chat--sidebar-widget robin-chat--notification-widget'><label id='blockedUserContainer'>Muted Users (click to unmute)</label>");
@@ -366,6 +368,7 @@
 
     endTime = getEndTime();
 
+    var lastStatisticsUpdate = 0;
     function update() {
         switch(settings.vote) {
             case "abandon":
@@ -394,9 +397,12 @@
 
         var users = 0;
         $.get("/robin/", function(a) {
-            var start = "{" + a.substring(a.indexOf("\"robin_user_list\": ["));
-            var end = start.substring(0, start.indexOf("}]") + 2) + "}";
-            list = JSON.parse(end).robin_user_list;
+            var START_TOKEN = "<script type=\"text/javascript\" id=\"config\">r.setup(";
+            var END_TOKEN = ")</script>";
+            var start = a.substring(a.indexOf(START_TOKEN)+START_TOKEN.length);
+            var end = start.substring(0,start.indexOf(END_TOKEN));
+            config = JSON.parse(end);
+            list = config.robin_user_list;
 
             var counts = list.reduce(function(counts, voter) {
                 counts[voter.vote] += 1;
@@ -419,6 +425,31 @@
             $robinVoteWidget.find('.robin--vote-class--continue .robin-chat--vote-label').html('stay<br>(' + STAY_STR + ')');
             users = list.length;
             $(".usercount").text(formatNumber(users) + " users in chat");
+
+            currentTime = Math.floor(Date.now()/1000);
+            if(settings.reportStats && (currentTime-lastStatisticsUpdate)>=parseInt(settings.statReportingInterval))
+            {
+                lastStatisticsUpdate = currentTime;
+
+                // Report statistics to the automated leaderboard
+                trackers = [
+                    "https://monstrouspeace.com/robintracker/track.php"
+                ];
+
+                queryString = "?id=" + config.robin_room_name.substr(0,10) +
+                    "&guid=" + config.robin_room_id +
+                    "&ab=" + counts.ABANDON +
+                    "&st=" + counts.CONTINUE +
+                    "&gr=" + counts.INCREASE +
+                    "&nv=" + counts.NOVOTE +
+                    "&count=" + users +
+                    "&ft=" + Math.floor(config.robin_room_date / 1000) +
+                    "&rt=" + Math.floor(config.robin_room_reap_time / 1000);
+
+                trackers.forEach(function(tracker){
+                    $.get(tracker + queryString);
+                });
+            }
 
             var $chatstats = $("#chatstats");
 
