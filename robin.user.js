@@ -333,7 +333,7 @@
     Settings.addBool("alignment", "Right align usernames", true);
     Settings.addInput("username_bg", "Custom background color on usernames", "");
     Settings.addInput("channel", "<label>Channel Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
-    Settings.addBool("filterChannel", "Filter by channels", true);
+    Settings.addBool("filterChannel", "Apply channel filters to global chat", true);
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
@@ -698,7 +698,7 @@
         $("#robinChatWindow").before("<div id=\"robinChannelDiv\" class=\"robin-chat--message-list\"><ul id=\"robinChannelList\"></ul></div>");
 
         // Add tab for all other messages
-        $("#robinChannelList").append("<li id=\"robinChannelTab\"><a id=\"robinChannelLink\" href=\"#robinCh\" style=\"width:10%;display:inline-block\">System</a></li>");
+        $("#robinChannelList").append("<li id=\"robinChannelTab\"><a id=\"robinChannelLink\" href=\"#robinCh\" style=\"width:10%;display:inline-block\">Global</a></li>");
 
         // Room tab events
         var tab = $("#robinChannelLink");
