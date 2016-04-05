@@ -322,6 +322,7 @@
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "<a href='https://twitchemotes.com/filters/global' target='_blank'>Twitch emotes</a>", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
+    Settings.addInput("messageHistorySize", "Message History Size", "50");
 
     $("#settingContent").append("<div class='robin-chat--sidebar-widget robin-chat--notification-widget'><label id='blockedUserContainer'>Muted Users (click to unmute)</label>");
     $("#blockedUserContainer").append("<div id='blockedUserList' class='robin-chat--sidebar-widget robin-chat--user-list-widget'></div>");
@@ -846,7 +847,7 @@
         else
             dest.val(chanName + " " + source);
     }
-	
+
 	var pastMessageQueue = [];
 	var pastMessageQueueIndex = 0;
 	var pastMessageTemp = "";
@@ -855,17 +856,18 @@
 		pastMessageQueueIndex = 0;
 		pastMessageTemp = "";
 		var value = $("#robinMessageTextAlt").val();
-		
+
 		if (!value || (pastMessageQueue.length > 0 && value == pastMessageQueue[0]))
 			return;
-		
+
 		pastMessageQueue.unshift(value);
-		
-		// Currently only storing the past 50 messages. 
-		if (pastMessageQueue.length > 50)
+
+		// Currently only storing the past 50 messages.
+        var maxhistorysize = parseInt(settings.messageHistorySize || "50", 10);
+		if (pastMessageQueue.length > maxhistorysize)
 			pastMessageQueue.pop();
 	}
-	
+
 	function onMessageBoxSubmit()
 	{
 		updatePastMessageQueue();
@@ -877,7 +879,7 @@
 		var key = e.keyCode || e.which;
 		if (key != 9 && key != 38 && key != 40)
 			return;
-		
+
 		e.preventDefault();
 		e.stopPropagation();
 		e.stopImmediatePropagation();
@@ -885,33 +887,33 @@
 		var source = $("#robinMessageText").val();
 		var sourceAlt = $("#robinMessageTextAlt").val();
 		var chanName = selChanName();
-		
+
 		// Tab - Auto Complete
 		if (key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
 			sourceAlt = source.substring(chanName.length).trim();
 			$("#robinMessageTextAlt").val(sourceAlt);
 			return;
 		}
-		
+
 		// Up Arrow - Message History
 		if (key == 38 && pastMessageQueue.length > pastMessageQueueIndex) {
 			if (pastMessageQueueIndex === 0) {
 				pastMessageTemp = sourceAlt;
 			}
-			
+
 			sourceAlt = pastMessageQueue[pastMessageQueueIndex++];
 		}
 		// Down Arrow - Message History
 		else if (key == 40 && pastMessageQueueIndex > 0) {
 			pastMessageQueueIndex--;
-			
+
 			if (pastMessageQueueIndex === 0) {
 				sourceAlt = pastMessageTemp;
 			} else {
 				sourceAlt = pastMessageQueue[pastMessageQueueIndex - 1];
 			}
 		}
-		
+
 		$("#robinMessageTextAlt").val(sourceAlt);
 		updateMessage();
     }
