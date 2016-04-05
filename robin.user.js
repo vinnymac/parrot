@@ -64,8 +64,23 @@
             drop_html = drop_html + '<option value="'+channel_name+'">'+channel_name+'</option>';
         }
 
-        $("#robinSendMessage").prepend('<div id= "chat-prepend-area"<span> Send chat to: </span> <select id="chat-prepend-select" name="chat-prepend-select">' + drop_html + '</select>');
+        $("#robinSendMessage").prepend('<div id="chat-prepend-area"><span> Send chat to: </span> <select id="chat-prepend-select" name="chat-prepend-select">' + drop_html + '</select><div class="robin-chat--sidebar-widget robin-chat--notification-widget" style="display:inline;"><label style="display:inline;"><input type="checkbox" name="setting-see-only-channels">See only from channels</label></div></div>');
         $("#chat-prepend-select").on("change", function() { updateMessage(); });
+
+        $("input[name='setting-see-only-channels']").prop("checked", settings.filterChannel);
+
+        $("input[name='setting-see-only-channels']").change(function() {
+
+            var newVal = $(this).prop('checked');
+            $("input[name='setting-filterChannel']").prop( "checked", newVal);
+
+            settings.filterChannel = newVal;
+            Settings.save(settings);
+        });
+
+        $("input[name='setting-filterChannel']").change(function() {
+            $("input[name='setting-see-only-channels']").prop("checked", $(this).prop('checked'));
+        })
     }
 
     // Utils
@@ -204,7 +219,7 @@
             defaultSetting = settings[name] || defaultSetting;
 
             $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><label><input type="checkbox" name="setting-' + name + '">' + description + '</label></div>');
-            $("input[name='setting-" + name + "']").on("click", function() {
+            $("input[name='setting-" + name + "']").change(function() {
                 settings[name] = !settings[name];
                 Settings.save(settings);
 
