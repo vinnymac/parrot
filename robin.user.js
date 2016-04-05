@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.69
+// @version      2.70
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
 // @include      https://www.reddit.com/robin*
@@ -865,6 +865,7 @@
         var maxhistorysize = parseInt(settings.messageHistorySize || "50", 10);
         if (maxhistorysize < 0 || isNaN(maxhistorysize)) {
             maxhistorysize = 50;
+	}
 
         while (pastMessageQueue.length > maxhistorysize) {
             pastMessageQueue.pop();
