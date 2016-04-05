@@ -846,21 +846,72 @@
         else
             dest.val(chanName + " " + source);
     }
+	
+	var pastMessageQueue = [];
+	var pastMessageQueueIndex = 0;
+	var pastMessageTemp = "";
+	function updatePastMessageQueue()
+	{
+		pastMessageQueueIndex = 0;
+		pastMessageTemp = "";
+		var value = $("#robinMessageTextAlt").val();
+		
+		if (!value || (pastMessageQueue.length > 0 && value == pastMessageQueue[0]))
+			return;
+		
+		pastMessageQueue.unshift(value);
+		
+		// Currently only storing the past 50 messages. 
+		if (pastMessageQueue.length > 50)
+			pastMessageQueue.pop();
+	}
+	
+	function onMessageBoxSubmit()
+	{
+		updatePastMessageQueue();
+		$("#robinMessageTextAlt").val("");
+	}
 
-    function tabAutoComplete(e)
+    function onMessageBoxKeyUp(e)
     {
-        if ((e.keyCode || e.which) != 9) return;
+        var key = e.keyCode || e.which;
+		if (key != 9 && key != 38 && key != 40)
+			return;
+		
+		e.preventDefault();
 
-        e.preventDefault();
-
-        var source = $("#robinMessageText").val();
-        var sourceAlt = $("#robinMessageTextAlt").val();
-        var chanName = selChanName();
-
-        if (source.toLowerCase().startsWith(chanName.toLowerCase()))
-            source = source.substring(chanName.length).trim();
-
-        $("#robinMessageTextAlt").val(source);
+		var source = $("#robinMessageText").val();
+		var sourceAlt = $("#robinMessageTextAlt").val();
+		var chanName = selChanName();
+		
+		// Tab - Auto Complete
+		if (key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
+			sourceAlt = source.substring(chanName.length).trim();
+			$("#robinMessageTextAlt").val(sourceAlt);
+			return;
+		}
+		
+		// Up Arrow - Message History
+		if (key == 38 && pastMessageQueue.length > pastMessageQueueIndex) {
+			if (pastMessageQueueIndex === 0) {
+				pastMessageTemp = sourceAlt;
+			}
+			
+			sourceAlt = pastMessageQueue[pastMessageQueueIndex++];
+		}
+		// Down Arrow - Message History
+		else if (key == 40 && pastMessageQueueIndex > 0) {
+			pastMessageQueueIndex--;
+			
+			if (pastMessageQueueIndex === 0) {
+				sourceAlt = pastMessageTemp;
+			} else {
+				sourceAlt = pastMessageQueue[pastMessageQueueIndex - 1];
+			}
+		}
+		
+		$("#robinMessageTextAlt").val(sourceAlt);
+		updateMessage();
     }
 
     var myObserver = new MutationObserver(mutationHandler);
@@ -1036,11 +1087,11 @@
     $("#robinMessageText").css("display", "none");
     // Alternate message input box (doesn't show the channel prefixes)
     $("#robinMessageTextAlt").on("input", function() { updateMessage(); });
-    $("#robinMessageTextAlt").on("keyup", function(e) { tabAutoComplete(e); });
+    $("#robinMessageTextAlt").on("keyup", function(e) { onMessageBoxKeyUp(e); });
 
     // Send message button
     $("#robinSendMessage").append('<div onclick={$(".text-counter-input").submit();} class="robin-chat--vote" id="sendBtn">Send Message</div>'); // Send message
-    $("#robinSendMessage").on("submit", function() { $("#robinMessageTextAlt").val(""); } );
+    $("#robinSendMessage").on("submit", function() { onMessageBoxSubmit(); } );
 
     // Setup page for tabbed channels
     setupMultiChannel();
