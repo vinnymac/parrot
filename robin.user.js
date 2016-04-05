@@ -1186,31 +1186,39 @@
     
     $(document).keydown(function(e) {
 
-        if(!((e.metaKey || e.ctrlKey) && e.shiftKey)) {
-            return;
+        var lKeycode = 39;
+        var rKeycode = 37;
+        
+        if (!settings.enableQuickTabNavigation) {
+            if !((e.metaKey || e.ctrlKey) && e.shiftKey)) {
+                return;
+            }
+        }
+        else {          
+            if eval(!generateKeyCodeEval()) {
+                return;
+            }
+            else {
+                lKeycode = quickTabNaviKeyLeft;
+                rKeycode = quickTabNaviKeyRight;   
+            }
         }
 
-        if (e.keyCode == 39) {
-            // right channel
-
+        if (e.keyCode == rKeycode) { // right channel
             var newChanIdx = selectedChannel + 1;
 
-            if(newChanIdx == channelList.length) {
+            if (newChanIdx == channelList.length) {
                 newChanIdx = -1;
             }
-
             selectChannel(newChanIdx);
         }
 
-        if (e.keyCode == 37) {
-            // left channel
-
+        if (e.keyCode == lKeycode) { // left channel
             var newChanIdx = selectedChannel - 1;
 
-            if(newChanIdx <= -2) {
+            if (newChanIdx <= -2) {
                 newChanIdx = channelList.length - 1;
             }
-
             selectChannel(newChanIdx);
         }
     });
