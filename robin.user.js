@@ -138,7 +138,7 @@
             $robinVoteWidget.prepend("<div class='addon'><div class='usercount robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend("<div class='addon'><div class='timeleft robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
-            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="text-align:center;"><a target="_blank" href="https://github.com/5a1t/parrot">parrot - soKukunelits fork' + versionString + '</a></div>');
+            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="text-align:center;font-size:15px;font-weight:bold;"><a target="_blank" href="https://github.com/5a1t/parrot"><b style="text-decoration: none; font-size: 18px; color: #000000;">Parrot<p></b>soKukunelits fork<b style="text-decoration: none; color: #000000;"> - </b>' + versionString + '</p></a></div>');
 
             // Setting container
             $(".robin-chat--sidebar").before(
@@ -294,7 +294,7 @@
     // Get version string (if available from script engine)
     var versionString = "";
     if (typeof GM_info !== "undefined") {
-        versionString = " - v" + GM_info.script.version;
+        versionString = "v" + GM_info.script.version;
     }
 
     Settings.setupUI($robinVoteWidget);
