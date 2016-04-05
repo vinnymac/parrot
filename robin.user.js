@@ -1413,13 +1413,13 @@ GM_addStyle(" \
 	#standingsTable table th {font-weight: bold} \
     .robin-chat--sidebar.sidebarminimized {display: none; } \
     #robinChannelList {         \
-        width: 72%;   \
-        top: 105px;   \
+        width: 72%!important;   \
+        top: 105px!important;   \
     }  \
     ul#robinChannelList a { \
-    font-size:1em; \
-    padding:2px 30px ; \
-    width:auto; \
+    font-size:1em!important; \
+    padding:2px 30px!important; \
+    width:auto!important; \
     } \
 ");
 })();
