@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.63
+// @version      2.65
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin
 // @include      https://www.reddit.com/robin*
@@ -137,8 +137,8 @@
             $robinVoteWidget.prepend("<div class='addon'><div id='chatstats' class='robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend("<div class='addon'><div class='usercount robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend("<div class='addon'><div class='timeleft robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
-            $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
-            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="text-align:center;font-size:15px;font-weight:bold;"><a target="_blank" href="https://github.com/5a1t/parrot"><b style="text-decoration: none; font-size: 18px; color: #000000;">Parrot<p></b>soKukunelits fork<b style="text-decoration: none; color: #000000;"> - </b>' + versionString + '</p></a></div>');
+            $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap" style="padding-top:-10px;"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
+            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;"><a target="_blank" href="https://github.com/5a1t/parrot"><b style="text-decoration: none; font-size: 18px; color: #000000;">Parrot<p></b>soKukunelits fork<b style="text-decoration: none; color: #000000;"> - </b>' + versionString + '</p></a></div>');
 
             // Setting container
             $(".robin-chat--sidebar").before(
@@ -852,6 +852,7 @@
         if ((e.keyCode || e.which) != 9) return;
 
         e.preventDefault();
+        e.stopPropagation();
 
         var source = $("#robinMessageText").val();
         var sourceAlt = $("#robinMessageTextAlt").val();
@@ -861,6 +862,8 @@
             source = source.substring(chanName.length).trim();
 
         $("#robinMessageTextAlt").val(source);
+
+        return false;
     }
 
     var myObserver = new MutationObserver(mutationHandler);
