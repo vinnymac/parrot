@@ -66,4 +66,4 @@ http://piratepad.net/Zg3MJL40Qh
 
 ## Screenshots
 
-![1](https://lambda.sx/HIx.png) ![2](https://lambda.sx/g2S.png)
+![1](https://lambda.sx/tfr.png) ![2](https://lambda.sx/tbi.png) ![3](https://lambda.sx/3vR.png) ![4](https://lambda.sx/IoR.png) ![5](https://lambda.sx/blO.png)
