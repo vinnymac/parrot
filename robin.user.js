@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.75
+// @version      2.76
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
@@ -57,7 +57,7 @@
         $("#chat-prepend-area").remove();
         //select dropdown chat.
         //generate dropdown html
-        split_channels= settings.channel.split(",");
+        split_channels= getChannelString().split(",");
         drop_html = "";
         for (var tag in split_channels){
             var channel_name = split_channels[tag].trim();
@@ -76,17 +76,26 @@
 
             settings.filterChannel = newVal;
             Settings.save(settings);
+
+            buildDropdown();
         });
 
         $("input[name='setting-filterChannel']").change(function() {
             $("input[name='setting-see-only-channels']").prop("checked", $(this).prop('checked'));
+
+            buildDropdown();
         })
     }
 
     // Utils
+    function getChannelString() {
+        return settings.filterChannel ? settings.channel : "," + settings.channel;
+    }
+
+
     function getChannelList()
     {
-        var channels = String(settings.channel).split(",");
+        var channels = String(getChannelString()).split(",");
         var channelArray = [];
 
         for (i = 0; i < channels.length; i++)
@@ -399,7 +408,7 @@
     Settings.addBool("alignment", "Right align usernames", true);
     Settings.addInput("username_bg", "Custom background color on usernames", "");
     Settings.addInput("channel", "<label>Channel Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
-    Settings.addBool("filterChannel", "Apply channel filters to global chat", true);
+    Settings.addBool("filterChannel", "Apply channel filters to global chat", true, function() { buildDropdown(); });
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
     Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
@@ -1057,7 +1066,7 @@
             // There are nodes added
             if (jq.length > 0) {
                 var colors_match = {};
-                split_channels = settings.channel.toLowerCase().split(",");
+                split_channels = getChannelString().toLowerCase().split(",");
 
                 for(i = 0; i < split_channels.length; i++){
                     colors_match[split_channels[i].trim()] = colors[i];
@@ -1088,7 +1097,7 @@
 
                 var is_muted = (mutedList.indexOf(thisUser) >= 0);
                 var is_spam = (settings.removeSpam && isBotSpam(messageText));
-                var results_chan = hasChannel(messageText, settings.channel);
+                var results_chan = hasChannel(messageText, getChannelString());
 
                 var remove_message = is_muted || is_spam;
 
@@ -1120,7 +1129,7 @@
 
                     //still show mentions in highlight color.
 
-                    var result = hasChannel(messageText, settings.channel);
+                    var result = hasChannel(messageText, getChannelString());
 
                     if(result.has) {
                         $message.parent().css("background", colors_match[result.name]);
@@ -1128,7 +1137,7 @@
 
                     var is_not_in_channels = (settings.filterChannel &&
                          !jq.hasClass('robin--user-class--system') &&
-                         String(settings.channel).length > 0 &&
+                         String(getChannelString()).length > 0 &&
                          !results_chan.has);
 
                         if (is_not_in_channels) {
