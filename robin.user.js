@@ -614,15 +614,22 @@
     var colors = ['rgba(255,0,0,0.1)','rgba(0,255,0,0.1)','rgba(0,0,255,0.1)', 'rgba(0,255,255,0.1)','rgba(255,0,255,0.1)', 'rgba(255,255,0,0.1)'];
 
 
-    //twitch emotes
+	//Emotes by ande_
+    //Normal Twitch emotes
     var emotes = {};
-    $.getJSON("https://twitchemotes.com/api_cache/v2/global.json", function( data ) {
+    $.getJSON("https://twitchemotes.com/api_cache/v2/global.json", function(data) {
         emotes = data.emotes;
-        console.log(emotes);
-
         for(var prop in emotes){
             emotes[prop.toLowerCase()] = emotes[prop];
         }
+    });
+	
+	//BetterTwitchTV emotes
+	var bttvEmotes = {};
+	$.getJSON("https://api.betterttv.net/2/emotes", function(data) {
+		data.emotes.forEach(function(emote){
+			bttvEmotes[emote.code.toLowerCase()] = emote.id;
+		});
     });
 
     // credit to wwwroth for idea (notification audio)
@@ -775,6 +782,11 @@
                         var key = (split[i]).toLowerCase();
                         if(emotes.hasOwnProperty(key)){
                             split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
+                            changes = true;
+                        }
+						if(bttvEmotes.hasOwnProperty(key)){
+						https://cdn.betterttv.net/emote/566c9fde65dbbdab32ec053e/1x
+                            split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
                             changes = true;
                         }
                     }
