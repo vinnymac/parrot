@@ -1185,26 +1185,28 @@
     }
     
     $(document).keydown(function(e) {
-
-        var lKeycode = 37;
-        var rKeycode = 39;
+        if (!settings.enableQuickTabNavigation) return; // Is quicknav enabled
         
-        if (settings.enableQuickTabNavigation) {
-            if (!((e.metaKey || e.ctrlKey) && e.shiftKey)) {
+        console.log(e.keyCode);
+        
+        var lKeycode = 37; 
+        var rKeycode = 39; // set the keycodes to default
+        
+        if (settings.enableAdvancedNaviOptions) { // are we using advanced settings
+            if (eval(generateKeyCodeEval())) { // hopefully this eval'd right
                 return;
             }
+            
+            lKeycode = settings.quickTabNaviKeyLeft; // if we made it this far set the new keycodes
+            rKeycode = settings.quickTabNaviKeyRight; 
         }
-        else {          
-            if (!eval(generateKeyCodeEval())) {
+        else { // using original keycodes
+            if (!((e.metaKey || e.ctrlKey) && e.shiftKey)) { 
                 return;
-            }
-            else {
-                lKeycode = quickTabNaviKeyLeft;
-                rKeycode = quickTabNaviKeyRight;   
             }
         }
 
-        if (e.keyCode == rKeycode) { // right channel
+        if (e.keyCode == lKeycode) { // left channel
             var newChanIdx = selectedChannel + 1;
 
             if (newChanIdx == channelList.length) {
@@ -1213,7 +1215,7 @@
             selectChannel(newChanIdx);
         }
 
-        if (e.keyCode == lKeycode) { // left channel
+        if (e.keyCode == rKeycode) { // right channel
             var newChanIdx = selectedChannel - 1;
 
             if (newChanIdx <= -2) {
