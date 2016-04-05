@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.72
+// @version      2.73
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456
 // @include      https://www.reddit.com/robin*
@@ -670,7 +670,7 @@
             emotes[prop.toLowerCase()] = emotes[prop];
         }
     });
-	
+
 	//BetterTwitchTV emotes
 	var bttvEmotes = {};
 	$.getJSON("https://api.betterttv.net/2/emotes", function(data) {
