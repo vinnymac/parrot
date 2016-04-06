@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.84
+// @version      2.88
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -1081,7 +1081,7 @@
 
     function onMessageBoxKeyUp(e)
     {
-        var key = e.keyCode || e.which;
+        var key = (e.keyCode ? e.KeyCode : e.charCode) || e.which;
         if (key != 9 && key != 38 && key != 40)
             return;
 
@@ -1311,7 +1311,7 @@
     $("#robinMessageTextAlt")
         .on("keydown", function(e) {
 
-            if ((e.keyCode || e.which) != 9) return;
+            if (((e.keyCode ? e.KeyCode : e.charCode) || e.which) != 9) return;
 
             e.preventDefault();
             // e.stopPropagation();
@@ -1375,7 +1375,8 @@
             }
         }
 
-        if (e.keyCode == lKeycode) {
+	key = e.keyCode ? e.keyCode : e.charCode;
+        if (key == lKeycode) {
             var newChanIdx = selectedChannel - 1;
 
             if (newChanIdx <= -2) {
@@ -1384,7 +1385,7 @@
             selectChannel(newChanIdx);
         }
 
-        if (e.keyCode == rKeycode) {
+        if (key == rKeycode) {
             var newChanIdx = selectedChannel + 1;
 
             if (newChanIdx == channelList.length) {
