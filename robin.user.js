@@ -189,7 +189,7 @@
             $robinVoteWidget.prepend("<div class='addon'><div class='timeleft robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap" style="padding-top:-10px;"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
             $robinVoteWidget.append('<div class="addon"><div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;" id="standingsBtn">Show Standings</div></div>');
-			$("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;"><a target="_blank" href="https://github.com/5a1t/parrot"><div class="robin-chat--vote font-size: 18px;"><img src="http://i.imgur.com/ch75qF2.png"  style="display:inline-block; vertical-align:middle;width:15px;height:15px;">Parrot</div><p style="font-size:12px;">soKukunelits fork ~ ' + versionString + '</p></a></div>');
+            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;"><a target="_blank" href="https://github.com/5a1t/parrot"><div class="robin-chat--vote font-size: 18px;"><img src="http://i.imgur.com/ch75qF2.png"  style="display:inline-block; vertical-align:middle;width:15px;height:15px;">Parrot</div><p style="font-size:12px;">soKukunelits fork ~ ' + versionString + '</p></a></div>');
 
             // Setting container
             $(".robin-chat--sidebar").before(
@@ -200,16 +200,16 @@
                 '</div>'
             );
 
-			// Standing container
- 			$("#settingContainer").before(
- 			    '<div class="robin-chat--sidebar" style="display:none;" id="standingsContainer">' +
+            // Standing container
+            $("#settingContainer").before(
+                '<div class="robin-chat--sidebar" style="display:none;" id="standingsContainer">' +
                     '<div class="robin-chat--sidebar-widget robin-chat--vote-widget" id="standingsContent">' +
- 					    '<div id="standingsTable"></div>' +
- 						'<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;"><a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="robinStandingsTab">Full Leaderboard</a></div>' +
+                        '<div id="standingsTable"></div>' +
+                        '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;"><a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="robinStandingsTab">Full Leaderboard</a></div>' +
                         '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;" id="closeStandingsBtn">Close Standings</div>' +
                      '</div>' +
                  '</div>'
- 			);
+            );
 
             $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><ul><li>Click on chat name to hide sidebar</li><li>Left click usernames to mute.</li><li>Right click usernames to copy to message.<li>Tab autocompletes usernames in the message box.</li><li>Ctrl+shift+left/right switches between channel tabs.</li><li>Up/down in the message box cycles through sent message history.</li><li>Report any bugs or issues <a href="https://github.com/5a1t/parrot/issues/new"><strong>HERE<strong></a></li><li>Created for soKukuneli chat (T16)</li></ul></div>');
 
@@ -223,23 +223,23 @@
             $("#closeBtn").on("click", function closeSettings() {
                 $(".robin-chat--sidebar").show();
                 $("#settingContainer").hide();
-				$("#standingsContainer").hide();
+                $("#standingsContainer").hide();
                 tryHide();
                 update();
             });
 
-			$("#standingsBtn").on("click", function openStandings() {
- 				$(".robin-chat--sidebar").hide();
-				startStandings();
-				$("#standingsContainer").show();
-			});
+            $("#standingsBtn").on("click", function openStandings() {
+                $(".robin-chat--sidebar").hide();
+                startStandings();
+                $("#standingsContainer").show();
+            });
 
-			$("#closeStandingsBtn").on("click", function closeStandings() {
- 				$(".robin-chat--sidebar").show();
- 				stopStandings();
- 				$("#standingsContainer").hide();
- 				$("#settingContainer").hide();
- 			});
+            $("#closeStandingsBtn").on("click", function closeStandings() {
+                $(".robin-chat--sidebar").show();
+                stopStandings();
+                $("#standingsContainer").hide();
+                $("#settingContainer").hide();
+            });
 
             function setVote(vote) {
                 return function() {
@@ -355,44 +355,48 @@
     }
 
 
-	function grabStandings() {
-		var standings;
-		$.ajax({
-			url: 'https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/.rss?limit=1',
-			data: {},
-			success: function( data ) {
-				var currentRoomName = $('.robin-chat--room-name').text();
-				var standingsPost = $(data).find("entry > content").first();
-				var decoded = $($('<div/>').html(standingsPost).text()).find('table').first();
-				decoded.find('tr').each(function(i) { var row = $(this).find('td,th');
-													var nameColumn = $(row.get(2));
-													nameColumn.find('a').prop('target','_blank');
-													if (currentRoomName.startsWith(nameColumn.text().substring(0,6))) {
-														row.css('background-color', '#22bb45');
-													}
-													row.each(function(j) {if (j == 3 || j == 4 || j > 5) {
-														$(this).remove();
-													}});
-				});
-				$("#standingsTable").html(decoded);
-			},
-			dataType: 'xml'
-		});
-	}
+    function grabStandings() {
+        var standings;
+        $.ajax({
+            url: 'https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/.rss?limit=1',
+            data: {},
+            success: function( data ) {
+                var currentRoomName = $('.robin-chat--room-name').text();
+                var standingsPost = $(data).find("entry > content").first();
+                var decoded = $($('<div/>').html(standingsPost).text()).find('table').first();
+                decoded.find('tr').each(function(i) { var row = $(this).find('td,th');
+                                                    var nameColumn = $(row.get(2));
+                                                    nameColumn.find('a').prop('target','_blank');
+                                                    if (currentRoomName.startsWith(nameColumn.text().substring(0,6))) {
 
-	var standingsInterval = 0;
-	function startStandings() {
-		stopStandings();
-		standingsInterval = setInterval(grabStandings, 120000);
-		grabStandings();
-	}
 
-	function stopStandings() {
-	if (standingsInterval){
-			clearInterval(standingsInterval);
-			standingsInterval = 0;
-		}
-	}
+                                                        var color = String(settings.leaderboard_current_color).length > 0 ? String(settings.leaderboard_current_color).trim() : '#22bb45';
+
+                                                        row.css('background-color', color);
+                                                    }
+                                                    row.each(function(j) {if (j == 3 || j == 4 || j > 5) {
+                                                        $(this).remove();
+                                                    }});
+                });
+                $("#standingsTable").html(decoded);
+            },
+            dataType: 'xml'
+        });
+    }
+
+    var standingsInterval = 0;
+    function startStandings() {
+        stopStandings();
+        standingsInterval = setInterval(grabStandings, 120000);
+        grabStandings();
+    }
+
+    function stopStandings() {
+    if (standingsInterval){
+            clearInterval(standingsInterval);
+            standingsInterval = 0;
+        }
+    }
 
     var currentUsersName = $('div#header span.user a').html();
 
@@ -448,6 +452,9 @@
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
     Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", false);
     Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
+    Settings.addInput("leaderboard_current_color", "Highlight color of current chat room in leaderboard standings", '#22bb45');
+
+
 
     Settings.addBool("enableTabComplete", "Tab Autocomplete usernames", true);
     Settings.addBool("enableQuickTabNavigation", "Keyboard channel-tabs navigation", true);
@@ -780,7 +787,7 @@
     var colors = ['rgba(255,0,0,0.1)','rgba(0,255,0,0.1)','rgba(0,0,255,0.1)', 'rgba(0,255,255,0.1)','rgba(255,0,255,0.1)', 'rgba(255,255,0,0.1)'];
 
 
-	//Emotes by ande_
+    //Emotes by ande_
     //Normal Twitch emotes
     var emotes = {};
     $.getJSON("https://twitchemotes.com/api_cache/v2/global.json", function(data) {
@@ -790,12 +797,12 @@
         }
     });
 
-	//BetterTwitchTV emotes
-	var bttvEmotes = {};
-	$.getJSON("https://api.betterttv.net/2/emotes", function(data) {
-		data.emotes.forEach(function(emote){
-			bttvEmotes[emote.code.toLowerCase()] = emote.id;
-		});
+    //BetterTwitchTV emotes
+    var bttvEmotes = {};
+    $.getJSON("https://api.betterttv.net/2/emotes", function(data) {
+        data.emotes.forEach(function(emote){
+            bttvEmotes[emote.code.toLowerCase()] = emote.id;
+        });
     });
 
     // credit to wwwroth for idea (notification audio)
@@ -950,7 +957,7 @@
                             split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
                             changes = true;
                         }
-						if(bttvEmotes.hasOwnProperty(key)){
+                        if(bttvEmotes.hasOwnProperty(key)){
                             split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
                             changes = true;
                         }
@@ -1015,9 +1022,9 @@
         var source = $("#robinMessageTextAlt").val();
         var dest = $("#robinMessageText");
 
-		var chanPrefix = selChanName();
-		if (chanPrefix.length >	0)
-			chanPrefix += " ";
+        var chanPrefix = selChanName();
+        if (chanPrefix.length > 0)
+            chanPrefix += " ";
 
         if (source.startsWith("/me "))
             dest.val("/me " + chanPrefix + source.substring(4));
@@ -1496,8 +1503,8 @@ GM_addStyle(" \
     .res-nightmode .robin-chat .robin-chat--sidebar-widget { \
         border-bottom: none; \
     } \
-	#standingsTable table {width: 100%} \
-	#standingsTable table th {font-weight: bold} \
+    #standingsTable table {width: 100%} \
+    #standingsTable table th {font-weight: bold} \
     .robin-chat--sidebar.sidebarminimized {display: none; } \
     #robinChannelList {         \
         width: 72%!important;   \
