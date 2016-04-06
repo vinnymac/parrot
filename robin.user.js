@@ -1598,7 +1598,24 @@
     });
     //merge easter egg
     (function(){
-        var easterEgg_partyNoMore = localStorage.getItem('easterEgg_partyNoMore');
+        var easterEgg_partyNoMore = localStorage.getItem('easterEgg_partyNoMore'),
+            easterEgg_assetsCached = localStorage.getItem('easterEgg_assetsCached');
+
+        //chance to pre-cache assets
+        if(!easterEgg_assetsCached) {
+            var shouldCache = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+            if(shouldCache == 20) {
+                localStorage.setItem('easterEgg_assetsCached', true);
+                var easterEgg_cachedAirhorn = new Audio("https://www.myinstants.com/media/sounds/air-horn-club-sample_1.mp3");
+                var easterEgg_cachedCheer = new Audio("https://www.myinstants.com/media/sounds/cheering.mp3");
+                var easterEgg_cachedFireworks=new Image();
+                easterEgg_cachedFireworks.src='https://media.giphy.com/media/araoLWtAIZKzS/giphy.gif';
+                var easterEgg_cachedParrot=new Image();
+                easterEgg_cachedParrot.src='https://media.giphy.com/media/10v0l8aVLyLJ5e/giphy.gif';
+            }
+        }
+
+        //only play it once
         if(!easterEgg_partyNoMore){
             var easterEgg_robinTier,
                 easterEgg_airHorn = [],
