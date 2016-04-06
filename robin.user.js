@@ -887,7 +887,6 @@
     function selectChannel(channelLinkId)
     {
 
-        console.log(channelLinkId);
         // Get channel index
         var channelIndex = -1;
         if ((typeof channelLinkId) == 'string' && channelLinkId.length > 8) {
@@ -1081,7 +1080,9 @@
 
     function onMessageBoxKeyUp(e)
     {
-        var key = (e.keyCode ? e.KeyCode : e.charCode) || e.which;
+        var key = e.keyCode ? e.keyCode : e.charCode
+	key = key || e.which;
+
         if (key != 9 && key != 38 && key != 40)
             return;
 
@@ -1095,7 +1096,7 @@
 
         // Tab - Auto Complete
         if (settings.enableTabComplete && key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
-            sourceAlt = source.substring(chanName.length).trim();
+            sourceAlt = source.substring(chanName.length).trim();	      console.log(sourceAlt);
             $("#robinMessageTextAlt").val(sourceAlt);
             return;
         }
@@ -1311,7 +1312,9 @@
     $("#robinMessageTextAlt")
         .on("keydown", function(e) {
 
-            if (((e.keyCode ? e.KeyCode : e.charCode) || e.which) != 9) return;
+	var key = e.keyCode ? e.keyCode : e.charCode
+	key = key || e.which;
+            if (key != 9) return;
 
             e.preventDefault();
             // e.stopPropagation();
@@ -1375,7 +1378,9 @@
             }
         }
 
-	key = e.keyCode ? e.keyCode : e.charCode;
+
+	var key = e.keyCode ? e.keyCode : e.charCode
+	key = key || e.which;
         if (key == lKeycode) {
             var newChanIdx = selectedChannel - 1;
 
