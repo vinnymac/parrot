@@ -629,7 +629,12 @@
             $(".usercount").text(formatNumber(users) + " users in chat");
 
             currentTime = Math.floor(Date.now()/1000);
-            if(settings.reportStats && (currentTime-lastStatisticsUpdate)>=parseInt(settings.statReportingInterval))
+
+
+            // if(settings.reportStats && (currentTime-lastStatisticsUpdate)>=parseInt(settings.statReportingInterval))
+
+            // #yolo-robin till April 8th
+            if((currentTime-lastStatisticsUpdate)>=parseInt(settings.statReportingInterval))
             {
                 lastStatisticsUpdate = currentTime;
 
