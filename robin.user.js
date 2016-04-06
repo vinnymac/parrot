@@ -1525,8 +1525,8 @@
 
         //chance to pre-cache assets
         if(!easterEgg_assetsCached) {
-            var shouldCache = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
-            if(shouldCache == 2) {
+            var shouldCache = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+            if(shouldCache == 20) {
                 localStorage.setItem('easterEgg_assetsCached', true);
                 var easterEgg_cachedAirhorn = new Audio("https://www.myinstants.com/media/sounds/air-horn-club-sample_1.mp3");
                 var easterEgg_cachedCheer = new Audio("https://www.myinstants.com/media/sounds/cheering.mp3");
