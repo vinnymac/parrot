@@ -1326,7 +1326,7 @@
                     moveChannelMessage(results_chan.index, jq[0], userIsMentioned, true);
 
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
-                    moveChannelMessage(selectedChannel, jq[0], false, false);
+                    moveChannelMessage(selectedChannel, jq[0]);
 
                 if(results_chan.has) {
                     messageText = messageText.substring(results_chan.name.length).trim();
