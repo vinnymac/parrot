@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      3.12
+// @version      3.13
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -440,7 +440,7 @@
 
         // monstrouspeace.com tracker board
         $("#standingsTableMonstrous").html("");
-        
+
         if (settings.monstrousStats)
         {
             $.ajax({
@@ -463,7 +463,7 @@
                     });
                     decoded +=
                         "</tbody>\r\n" +
-                        "</table>\r\n" + 
+                        "</table>\r\n" +
                         '<br/>';
                     $("#standingsTableMonstrous").html(decoded);
                 }
