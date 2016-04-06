@@ -505,6 +505,7 @@
     Settings.addInput("username_bg", "Custom background color on usernames", "");
 
     Settings.addBool("filterChannel", "Filter Global chat to only be your channels", false, function() { buildDropdown(); });
+    Settings.addBool("removeChanMessageFromGlobal", "Don't show channel messages in the Global tab", false);
     Settings.addInput("channel", "<label>Channel Listing<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
     Settings.addInput("channel_exclude", "<label>Channel Exclusion Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li><strong>List of channels to exclude from Global channel (e.g. trivia channels)</strong></li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "");
 
@@ -1030,11 +1031,15 @@
         }
     }
 
-    function moveChannelMessage(channelIndex, message, overrideBGColor)
+    function moveChannelMessage(channelIndex, message, overrideBGColor, isChanMessage)
     {
         var channel = getChannelMessageList(channelIndex);
-        var messageClone = message.cloneNode(true);
-        var messageElem = $(messageClone.children && messageClone.children[2]);
+        var messageCopy = message;
+
+        if (isChanMessage && !settings.removeChanMessageFromGlobal)
+            messageCopy = messageCopy.cloneNode(true);
+
+        var messageElem = $(messageCopy.children && messageCopy.children[2]);
         var messageText = messageElem.text();
 
         // Remove channel name from channel messages
@@ -1051,9 +1056,9 @@
             }
         }
 
-        convertTextToSpecial(messageText, messageClone);
+        convertTextToSpecial(messageText, messageCopy);
 
-        channel.append(messageClone);
+        channel.append(messageCopy);
 
         markChannelChanged(channelIndex);
     }
@@ -1323,11 +1328,13 @@
 
                 // Move channel messages to channel tabs
                 if (results_chan.has)
-                    moveChannelMessage(results_chan.index, jq[0], userIsMentioned);
+                    moveChannelMessage(results_chan.index, jq[0], userIsMentioned, true);
 
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
-                    moveChannelMessage(selectedChannel, jq[0]);
+                    moveChannelMessage(selectedChannel, jq[0], false, false);
 
+                if (!settings.removeChanMessageFromGlobal)
+                {
                 if(results_chan.has) {
                     messageText = messageText.substring(results_chan.name.length).trim();
                     $message.text(messageText);
@@ -1339,6 +1346,7 @@
                 $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
                     .css("font-size", "12px")
                     .insertAfter($timestamp);
+                }
 
                 findAndHideSpam();
                 doScroll();
