@@ -91,9 +91,8 @@
     }
 
     function updateUserPanel(){
-	console.log("in updatepanel");
 	$(".robin-room-participant").each( function(){
-		lastseen = userExtra[$(this).text().trim()];
+		lastseen = userExtra[$(this).find(".robin--username").text().trim()];
 		if(lastseen){
 			$( this ).find(".robin--username").nextAll().remove();
 			$( this ).find(".robin--username").after("<span class=\"robin-message--message\"style=\"font-size: 10px;\"> &nbsp;" + lastseen + "</span>");
@@ -1319,8 +1318,8 @@
                 var messageText = $message.text();
 
 		var options = {
-   			 weekday: "long", year: "numeric", month: "short",
-    			 day: "numeric", hour: "2-digit", minute: "2-digit"
+   			month: "2-digit",
+    			 day: "2-digit", hour: "2-digit", minute: "2-digit"
 		};
 		datestring = new Date().toLocaleTimeString("en-us", options);
 		userExtra[$user.text()] = datestring;
