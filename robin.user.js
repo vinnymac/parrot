@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.96
+// @version      2.97
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -98,7 +98,7 @@
 			$( this ).find(".robin--username").after("<span class=\"robin-message--message\"style=\"font-size: 10px;\"> &nbsp;" + lastseen + "</span>");
 		}
 	});
-	
+
     }
 
     // Utils
@@ -478,7 +478,7 @@
 
 	console.log("storing lastseens");
 	UserExtra.save(userExtra);
-    }	
+    }
 
     var userExtraInterval = 0;
 
