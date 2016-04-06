@@ -455,7 +455,7 @@
     Settings.addInput("username_bg", "Custom background color on usernames", "");
 
     Settings.addBool("filterChannel", "Filter Global chat to only be your channels", true, function() { buildDropdown(); });
-    Settings.addInput("channel", "<label>Channel Listing<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot,", function() { buildDropdown(); resetChannels(); });
+    Settings.addInput("channel", "<label>Channel Listing<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
     Settings.addInput("channel_exclude", "<label>Channel Exclusion Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li><strong>List of channels to exclude from Global channel (e.g. trivia channels)</strong></li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "");
 
     Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
