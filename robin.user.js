@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.93
+// @version      2.94
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -1158,7 +1158,7 @@
     $("#robinChatMessageList").each(function() {
         myObserver.observe(this, { childList: true });
     });
-	
+
     var counter=0.0;
     var countdown=0;
     function mutationHandler(mutationRecords) {
@@ -1307,16 +1307,16 @@
             $('#sendBtn').html("Chat in: "+parseInt(countdown));
         }else if(countdown==1){
             $('#sendBtn').html("Send Message");
-            
+
             countdown=0;
         }
-        
+
     }
     setInterval(update, 10000);
     update();
 
     setInterval(countTimer, 500);
-	
+
     var flairColor = [
         '#e50000', // red
         '#db8e00', // orange
