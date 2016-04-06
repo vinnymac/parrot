@@ -982,9 +982,12 @@
     //
     function updateMessage()
     {
-        var chanPrefix = (selChanName() + " ").trim();
         var source = $("#robinMessageTextAlt").val();
         var dest = $("#robinMessageText");
+
+		var chanPrefix = selChanName();
+		if (chanPrefix.length >	0)
+			chanPrefix += " ";
 
         if (source.startsWith("/me "))
             dest.val("/me " + chanPrefix + source.substring(4));
