@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      3.17
+// @version      3.18
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -65,7 +65,7 @@
             drop_html = drop_html + '<option value="'+channel_name+'">'+channel_name+'</option>';
         }
 
-        $("#robinSendMessage").prepend('<div id="chat-prepend-area"><span> Send chat to: </span> <select id="chat-prepend-select" name="chat-prepend-select">' + drop_html + '</select><div class="robin-chat--sidebar-widget robin-chat--notification-widget" style="display:inline;"><label style="display:inline;"><input type="checkbox" name="setting-see-only-channels">'See chat only from filtered channel list' (Open Settings to setup)</label></div></div>');
+        $("#robinSendMessage").prepend('<div id="chat-prepend-area"><span> Send chat to: </span> <select id="chat-prepend-select" name="chat-prepend-select">' + drop_html + '</select><div class="robin-chat--sidebar-widget robin-chat--notification-widget" style="display:inline;"><label style="display:inline;"><input type="checkbox" name="setting-see-only-channels">See chat only from filtered channel list (Open Settings to setup)</label></div></div>');
         $("#chat-prepend-select").on("change", function() { updateMessage(); });
 
         $("input[name='setting-see-only-channels']").prop("checked", settings.filterChannel);
