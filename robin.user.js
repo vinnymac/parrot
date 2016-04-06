@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.94
+// @version      2.96
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -87,6 +87,18 @@
             buildDropdown();
             updateMessage();
         })
+    }
+
+    function updateUserPanel(){
+	console.log("in updatepanel");
+	$(".robin-room-participant").each( function(){
+		lastseen = userExtra[$(this).text().trim()];
+		if(lastseen){
+			$( this ).find(".robin--username").nextAll().remove();
+			$( this ).find(".robin--username").after("<span class=\"robin-message--message\"style=\"font-size: 10px;\"> &nbsp;" + lastseen + "</span>");
+		}
+	});
+	
     }
 
     // Utils
@@ -182,6 +194,29 @@
             return 0;
         }
     }
+
+
+  var UserExtra = {
+
+        load: function loadSetting() {
+            var userExtra = localStorage.getItem('parrot-user-extra');
+
+            try {
+                userExtra = userExtra ? JSON.parse(userExtra) : {};
+            } catch(e) {}
+
+            userExtra = userExtra || {};
+
+            return userExtra;
+        },
+
+        save: function saveSetting(userExtra) {
+            localStorage.setItem('parrot-user-extra', JSON.stringify(userExtra));
+        }
+
+
+   }
+
 
     var Settings = {
         setupUI: function() {
@@ -436,7 +471,20 @@
 
     Settings.setupUI($robinVoteWidget);
     var settings = Settings.load();
+    var userExtra = UserExtra.load();
+    startSaveUserExtra();
 
+    function tryStoreUserExtra(){
+
+	console.log("storing lastseens");
+	UserExtra.save(userExtra);
+    }	
+
+    var userExtraInterval = 0;
+
+    function startSaveUserExtra() {
+        userExtraInterval = setInterval(tryStoreUserExtra, 60*1000*5);
+    }
     // bootstrap
     tryHide();
 
@@ -1180,7 +1228,13 @@
                 var $message = $(jq[0].children && jq[0].children[2]);
                 var messageText = $message.text();
 
-
+		var options = {
+   			 weekday: "long", year: "numeric", month: "short",
+    			 day: "numeric", hour: "2-digit", minute: "2-digit"
+		};
+		datestring = new Date().toLocaleTimeString("en-us", options);
+		userExtra[$user.text()] = datestring;
+		updateUserPanel();
 
                 var exclude_list = String(settings.channel_exclude).split(",");
                 var results_chan_exclusion = hasChannelFromList(messageText, exclude_list, true);
