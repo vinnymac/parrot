@@ -1158,6 +1158,9 @@
     $("#robinChatMessageList").each(function() {
         myObserver.observe(this, { childList: true });
     });
+	
+    var counter=0.0;
+    var countdown=0;
     function mutationHandler(mutationRecords) {
         mutationRecords.forEach(function(mutation) {
             var jq = $(mutation.addedNodes);
@@ -1257,6 +1260,15 @@
                         }
                     }
                 }
+                if(thisUser.indexOf("[robin]") !=-1){
+                    if($message.text().indexOf("RATELIMIT") != -1){
+                       var rltime = $.trim($message.text().substr(54));
+                       rltime = parseInt(rltime.substring(0, rltime.indexOf(' ')))+1;
+                       if(rltime>10)rltime=1;
+                        console.log(rltime.toString());
+                       countdown=rltime;
+                   }
+                }
 
                 // DO NOT REMOVE THIS LINE
                 // convertTextToSpecial(messageText, jq[0]);
@@ -1288,9 +1300,23 @@
         });
     }
 
+    function countTimer(){
+        counter+=0.5;
+        if(countdown>1){
+            countdown-=0.5;
+            $('#sendBtn').html("Chat in: "+parseInt(countdown));
+        }else if(countdown==1){
+            $('#sendBtn').html("Send Message");
+            
+            countdown=0;
+        }
+        
+    }
     setInterval(update, 10000);
     update();
 
+    setInterval(countTimer, 500);
+	
     var flairColor = [
         '#e50000', // red
         '#db8e00', // orange
