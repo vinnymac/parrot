@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      3.21
+// @version      3.22
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -454,12 +454,12 @@
                         '<br/><div style="font-weight: bold; text-align: center;">MonstrousPeace.com tracking (experimental)</div><br/>' +
                         "<table>\r\n" +
                         "<thead>\r\n" +
-                        "<tr><th>#</th><th>Participants</th><th>Room Name</th><th>Tier</th></tr>\r\n" +
+                        "<tr><th>#</th><th>Participants</th><th>Grow</th><th>Stay</th><th>Room Name</th><th>Tier</th></tr>\r\n" +
                         "</thead>\r\n" +
                         "<tbody>\r\n";
 
                     $.each(data, function(index, e) {
-                        decoded += "<tr><td>" + (index+1) + "</td><td>" + e.count + "</td><td>" + e.room + "</td><td>" + e.tier + "</td></tr>\r\n";
+                        decoded += "<tr><td>" + (index+1) + "</td><td>" + e.count + "</td><td>" + e.grow + "</td><td>" + e.stay + "</td><td>" + e.room + "</td><td>" + e.tier + "</td></tr>\r\n";
                     });
                     decoded +=
                         "</tbody>\r\n" +
