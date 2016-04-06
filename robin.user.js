@@ -1323,7 +1323,7 @@
 
                 // Move channel messages to channel tabs
                 if (results_chan.has)
-                    moveChannelMessage(results_chan.index, jq[0], userIsMentioned, true);
+                    moveChannelMessage(results_chan.index, jq[0], userIsMentioned);
 
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
                     moveChannelMessage(selectedChannel, jq[0]);
