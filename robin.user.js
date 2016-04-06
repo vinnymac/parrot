@@ -245,7 +245,6 @@
                         '<div id="standingsTable">' +
                             '<div style="font-weight: bold; text-align: center;">Reddit leaderboard</div><br/>' +
                             '<div id="standingsTableReddit"></div><br/>' +
-                            '<br/><div style="font-weight: bold; text-align: center;">MonstrousPeace.com tracking (experimental)</div><br/>' +
                             '<div id="standingsTableMonstrous"></div>' +
                         '</div>' +
                         '<a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="_blank"><div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;">Full Leaderboard</div></a>' +
@@ -440,14 +439,19 @@
         });
 
         // monstrouspeace.com tracker board
-        $.ajax({
-            type: 'GET',
-            url: 'https://monstrouspeace.com/robintracker/json.php',
-            data: { get_param: 'value' },
-            dataType: 'json',
-            xhr: function() { return new GM_XHR(); },
+        $("#standingsTableMonstrous").html("");
+        
+        if (settings.monstrousStats)
+        {
+            $.ajax({
+                type: 'GET',
+                url: 'https://monstrouspeace.com/robintracker/json.php',
+                data: { get_param: 'value' },
+                dataType: 'json',
+                xhr: function() { return new GM_XHR(); },
                 success: function(data) {
                     var decoded =
+                        '<br/><div style="font-weight: bold; text-align: center;">MonstrousPeace.com tracking (experimental)</div><br/>' +
                         "<table>\r\n" +
                         "<thead>\r\n" +
                         "<tr><th>#</th><th>Participants</th><th>Room Name</th><th>Tier</th></tr>\r\n" +
@@ -459,10 +463,12 @@
                     });
                     decoded +=
                         "</tbody>\r\n" +
-                        "</table>\r\n";
+                        "</table>\r\n" + 
+                        '<br/>';
                     $("#standingsTableMonstrous").html(decoded);
                 }
-        });
+            });
+        }
     };
 
     //
@@ -589,8 +595,7 @@
     Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", true);
     Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
     Settings.addInput("leaderboard_current_color", "Highlight color of current chat room in leaderboard standings", '#22bb45');
-
-
+    Settings.addBool("monstrousStats", "Display monstrous leaderboard on standings page (needs permission)</a>", false);
 
     Settings.addBool("enableTabComplete", "Tab Autocomplete usernames", true);
     Settings.addBool("enableQuickTabNavigation", "Keyboard channel-tabs navigation", true);
