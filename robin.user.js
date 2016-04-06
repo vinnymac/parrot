@@ -1333,19 +1333,22 @@
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
                     moveChannelMessage(selectedChannel, jq[0], false, false);
 
+                if (!results_chan.has || !settings.removeChanMessageFromGlobal)
+                    markChannelChanged(-1);
+
                 if (!settings.removeChanMessageFromGlobal)
                 {
-                if(results_chan.has) {
-                    messageText = messageText.substring(results_chan.name.length).trim();
-                    $message.text(messageText);
-                }
+                    if(results_chan.has) {
+                        messageText = messageText.substring(results_chan.name.length).trim();
+                        $message.text(messageText);
+                    }
 
-                // This needs to be done after any changes to the $message.text() since they will overwrite $message.html() changes
-                convertTextToSpecial(messageText, jq[0]);
+                    // This needs to be done after any changes to the $message.text() since they will overwrite $message.html() changes
+                    convertTextToSpecial(messageText, jq[0]);
 
-                $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
-                    .css("font-size", "12px")
-                    .insertAfter($timestamp);
+                    $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
+                        .css("font-size", "12px")
+                        .insertAfter($timestamp);
                 }
 
                 findAndHideSpam();
