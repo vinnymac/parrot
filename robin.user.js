@@ -463,7 +463,7 @@
                     });
                     decoded +=
                         "</tbody>\r\n" +
-                        "</table>\r\n" +
+                        "</table>\r\n" + 
                         '<br/>';
                     $("#standingsTableMonstrous").html(decoded);
                 }
@@ -570,11 +570,10 @@
     // Options begin
     Settings.addButton("settingContent", "update-script-button", "Update Parrot", function(){ window.open("https://github.com/5a1t/parrot/raw/master/robin.user.js?t=" + (+ new Date()), "_blank"); });
     Settings.addButton("robinChatInput", "clear-chat-button", "Clear Chat",  clearChat);
-    Settings.addBool("hideVote", "Hide voting panel to prevent misclicks", false, tryHide);
+    Settings.addBool("hideVote", "Hide voting panel", false, tryHide);
     Settings.addBool("removeSpam", "Remove bot spam", true);
     Settings.addInput("spamFilters", "<label>Custom Spam Filters<ul><li><b>Checkbox 'Remove bot spam' (above)</b></li><li>Comma-delimited</li><li>Spaces are NOT stripped</li></ul></label>", "spam example 1,John Madden");
     Settings.addBool("enableUnicode", "Allow unicode characters. Unicode is considered spam and thus are filtered out", false);
-    // Settings.addBool("findAndHideSpam", "Remove messages that have been sent more than 3 times", false);
     Settings.addBool("sidebarPosition", "Left sidebar", false, toggleSidebarPosition);
     Settings.addBool("force_scroll", "Force scroll to bottom", false);
     Settings.addInput("maxprune", "Max messages before pruning", "500");
@@ -583,19 +582,19 @@
     Settings.addBool("alignment", "Right align usernames", true);
     Settings.addInput("username_bg", "Custom background color on usernames", "");
 
-    Settings.addBool("filterChannel", "Filter Global chat to only be your channels", false, function() { buildDropdown(); });
-    Settings.addBool("removeChanMessageFromGlobal", "Don't show channel messages in the Global tab", false);
+    Settings.addBool("removeChanMessageFromGlobal", "Hide channel messages in Global", false);
+    Settings.addBool("filterChannel", "Hide non-channel messages in Global", false, function() { buildDropdown(); });
     Settings.addInput("channel", "<label>Channel Listing<ul><li>Multi-room-listening with comma-separated rooms</li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "%parrot", function() { buildDropdown(); resetChannels(); });
     Settings.addInput("channel_exclude", "<label>Channel Exclusion Filter<ul><li>Multi-room-listening with comma-separated rooms</li><li><strong>List of channels to exclude from Global channel (e.g. trivia channels)</strong></li><li>Names are case-insensitive</li><li>Spaces are NOT stripped</li></ul></label>", "");
 
-    Settings.addBool("tabChanColors", "Use color on regular channel messages in tabs", true);
+    Settings.addBool("tabChanColors", "Use color on channel tabs", true);
     Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
+    Settings.addBool("monstrousStats", "Display monstrous leaderboard on standings page (asks for permission)</a>", false);
     Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", true);
     Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
     Settings.addInput("leaderboard_current_color", "Highlight color of current chat room in leaderboard standings", '#22bb45');
-    Settings.addBool("monstrousStats", "Display monstrous leaderboard on standings page (needs permission)</a>", false);
 
     Settings.addBool("enableTabComplete", "Tab Autocomplete usernames", true);
     Settings.addBool("enableQuickTabNavigation", "Keyboard channel-tabs navigation", true);
