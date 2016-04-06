@@ -34,8 +34,10 @@ http://piratepad.net/Zg3MJL40Qh
 9. Option to enable unicode!
 10. Fancy easy update button!
 10. Global username mentions.
-11. Twitch.tv emotes!
+11. Twitch.tv & BTTV emotes!
 12. Tab-Based Chatting!
+13. Sent Message History!
+14. Minified version of the automatic standings board.
 
 ## Updates
 
@@ -63,6 +65,9 @@ http://piratepad.net/Zg3MJL40Qh
     2.2: Tabbed chat! Switched the name to parrot around this time. Even more code cleanup (voltaek).
     2.3: Moved settings button, new stats thingy when buttons are hidden (dashed).
     2.4: Channel switching hotkeys, you can use slash commands in tabs (dashed, lost_penguin).
+    2.5: Optimizations and fixes, rearranged settings (dashed, Annon201)
+    2.6: Message history w/ up and down arrow (LTAcosta). New title (dashed). Leaderboard reporting (Unimatrix0).
+    2.7: BTTV emotes (anadee). Sent message history setting (LTAcosta). Standings view. Reorganized checkboxes.
 
 ## Screenshots
 
