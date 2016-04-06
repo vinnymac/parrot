@@ -317,7 +317,7 @@
         addBool: function addBoolSetting(name, description, defaultSetting, callback) {
             defaultSetting = settings[name] || defaultSetting;
 
-            $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><label><input type="checkbox" name="setting-' + name + '">' + description + '</label></div>');
+            $("#settingContent").append('<div class="robin-chat--sidebar-widget robin-chat--notification-widget"><label><input type="checkbox" name="setting-' + name + '"' + (defaultSetting ? ' checked' : '') + '>' + description + '</label></div>');
             $("input[name='setting-" + name + "']").change(function() {
                 settings[name] = !settings[name];
                 Settings.save(settings);
