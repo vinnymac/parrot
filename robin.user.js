@@ -266,6 +266,7 @@
 
             setting = setting || {};
 
+            toggleSidebarPosition(setting);
             if (!setting.vote)
                 setting.vote = "grow";
 
@@ -354,6 +355,19 @@
         getChannelMessageList(selectedChannel).empty();
     }
 
+    function toggleSidebarPosition(setting) {
+        settings = settings || setting;
+        var elements = {
+            header: $('.robin-chat--header'),
+            content: $('.content[role="main"]'),
+            votePanel: $('.robin-chat--buttons'),
+            sidebars: $('.robin-chat--sidebar'),
+            chat: $('.robin-chat--main')
+        };
+        var sidebars = elements.sidebars.detach();
+
+        settings.sidebarPosition ? elements.chat.before(sidebars) : elements.chat.after(sidebars);
+    }
 
     function grabStandings() {
         var standings;
@@ -432,6 +446,7 @@
     Settings.addInput("spamFilters", "<label>Custom Spam Filters<ul><li><b>Checkbox 'Remove bot spam' (above)</b></li><li>Comma-delimited</li><li>Spaces are NOT stripped</li></ul></label>", "spam example 1,John Madden");
     Settings.addBool("enableUnicode", "Allow unicode characters. Unicode is considered spam and thus are filtered out", false);
     // Settings.addBool("findAndHideSpam", "Remove messages that have been sent more than 3 times", false);
+    Settings.addBool("sidebarPosition", "Left sidebar", false, toggleSidebarPosition);
     Settings.addBool("force_scroll", "Force scroll to bottom", false);
     Settings.addInput("maxprune", "Max messages before pruning", "500");
     Settings.addInput("fontsize", "Chat font size", "12");
