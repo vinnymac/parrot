@@ -227,7 +227,7 @@
             $robinVoteWidget.prepend("<div class='addon'><div class='timeleft robin-chat--vote' style='font-weight:bold;pointer-events:none;'></div></div>");
             $robinVoteWidget.prepend('<div class="addon" id="openBtn_wrap" style="padding-top:-10px;"><div class="robin-chat--vote" id="openBtn" style="margin-left:0px;">Open Settings</div></div>');
             $robinVoteWidget.append('<div class="addon"><div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;" id="standingsBtn">Show Standings</div></div>');
-            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;"><a target="_blank" href="https://www.reddit.com/r/parrot_script/"><div class="robin-chat--vote font-size: 18px;"><img src="http://i.imgur.com/ch75qF2.png"  style="display:inline-block; vertical-align:middle;width:15px;height:15px;">Parrot</div><p style="font-size:12px;">soKukunelits fork ~ ' + versionString + '</p></a></div>');
+            $("#openBtn_wrap").prepend('<div class="robin-chat--sidebar-widget robin-chat--report" style="padding-top:0;text-align:center;font-size:15px;font-weight:bold;" style="text-decoration: none;"><a target="_blank" href="https://www.reddit.com/r/parrot_script/"><div class="robin-chat--vote font-size: 18px;"><img src="https://i.imgur.com/ch75qF2.png"  style="display:inline-block; vertical-align:middle;width:15px;height:15px;">Parrot</div><p style="font-size:12px;">soKukunelits fork ~ ' + versionString + '</p></a></div>');
 
             // Setting container
             $(".robin-chat--sidebar").before(
@@ -1307,10 +1307,16 @@
                 }
 
                 // cool we have a message.
-                var $timestamp = $(jq[0] && jq[0].children[0]);
-                var $user = $(jq[0].children && jq[0].children[1]);
-                var thisUser = $(jq[0].children && jq[0].children[1]).text();
-                var $message = $(jq[0].children && jq[0].children[2]);
+                var $timestamp = $(jq[0]).find('.robin-message--timestamp');
+                $(jq[0]).
+                var $user = $(jq[0]).find('.robin--username');
+                if(! $user.length)
+                {
+                    $timestamp.after('<span class="robin-message--from robin--username"></span>');
+                    $user = $(jq[0]).find('.robin--username');
+                }
+                var thisUser = $user.text();
+                var $message = $(jq[0]).find('.robin-message--message');
                 var messageText = $message.text();
 
 		var options = {
@@ -1346,7 +1352,7 @@
                 $message.css("font-family", stylecalc).css("font-size", settings.fontsize+"px");
 
 
-                var is_muted = (mutedList.indexOf(thisUser) >= 0);
+                var is_muted = (thisUser && mutedList.indexOf(thisUser) >= 0);
                 var is_spam = (settings.removeSpam && isBotSpam(messageText));
                 var results_chan = hasChannel(messageText, getChannelString());
 
