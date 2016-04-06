@@ -591,7 +591,7 @@
     Settings.addBool("twitchEmotes", "Twitch emotes (<a href='https://twitchemotes.com/filters/global' target='_blank'>Normal</a>, <a href='https://nightdev.com/betterttv/faces.php' target='_blank'>BTTV</a>)", false);
     Settings.addBool("timeoutEnabled", "Reload page after inactivity timeout", true);
     Settings.addInput("messageHistorySize", "Sent Message History Size", "50");
-    Settings.addBool("monstrousStats", "Display monstrous leaderboard on standings page (asks for permission)</a>", false);
+    Settings.addBool("monstrousStats", "Show automated leaderboard on standings page (asks for permission)</a>", false);
     Settings.addBool("reportStats", "Contribute statistics to the <a href='https://monstrouspeace.com/robintracker/'>Automated Leaderboard</a>.", true);
     Settings.addInput("statReportingInterval", "Report Statistics Interval (seconds) [above needs to be checked]", "300");
     Settings.addInput("leaderboard_current_color", "Highlight color of current chat room in leaderboard standings", '#22bb45');
