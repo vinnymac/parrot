@@ -1093,11 +1093,25 @@
         var source = $("#robinMessageText").val();
         var sourceAlt = $("#robinMessageTextAlt").val();
         var chanName = selChanName();
+        var namePart = "";
 
         // Tab - Auto Complete
         if (settings.enableTabComplete && key == 9 && source.toLowerCase().startsWith(chanName.toLowerCase())) {
-            sourceAlt = source.substring(chanName.length).trim();	      console.log(sourceAlt);
-            $("#robinMessageTextAlt").val(sourceAlt);
+            sourceAlt = source.substring(chanName.length).trim();
+            var space=sourceAlt.lastIndexOf(" ");
+            namePart = sourceAlt.substring(space).trim();
+            sourceAlt = sourceAlt.substring(0, sourceAlt.lastIndexOf(" "));
+            list = config.robin_user_list;
+           $(list).each(function(){
+                if(this.name.indexOf(namePart) == 0){
+                    namePart=(this.name);
+                    if(space!=-1)namePart=" "+namePart;
+                    return true;
+                }
+            });
+            $("#robinMessageTextAlt").val(sourceAlt+namePart);
+            sourceAlt=chanName+" "+sourceAlt;
+            $("#robinMessageText").val(sourceAlt+namePart);
             return;
         }
 
