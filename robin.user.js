@@ -72,18 +72,20 @@
         $("input[name='setting-see-only-channels']").change(function() {
 
             var newVal = $(this).prop('checked');
-            $("input[name='setting-filterChannel']").prop( "checked", newVal);
+            $("input[name='setting-filterChannel']").prop("checked", newVal);
 
             settings.filterChannel = newVal;
             Settings.save(settings);
 
             buildDropdown();
+            updateMessage();
         });
 
         $("input[name='setting-filterChannel']").change(function() {
             $("input[name='setting-see-only-channels']").prop("checked", $(this).prop('checked'));
 
             buildDropdown();
+            updateMessage();
         })
     }
 
@@ -923,6 +925,7 @@
 
     function setChannelSelected(tab, box, select)
     {
+
         if (select)
         {
             tab.attr("class", "robin-chan-tab-selected");
@@ -1028,6 +1031,11 @@
         return dropdownChannel();
     }
 
+    function updateTextCounter()
+    {
+        $("#textCounterDisplayAlt").text(String(Math.max(140 - Math.floor($("#robinMessageText").val().length), 0)));
+    }
+
     //
     // Update the message prepared for sending to server
     //
@@ -1046,6 +1054,8 @@
             dest.val(source);
         else
             dest.val(chanPrefix + source);
+
+        updateTextCounter();
     }
 
     var pastMessageQueue = [];
@@ -1319,6 +1329,11 @@
 
     // Message input box (hidden)
     $(".text-counter-input").attr("id", "robinMessageText");
+
+    $(".text-counter-display")
+      .css("display", "none")
+      .after('<span id="textCounterDisplayAlt">140</span>');
+
     $("#robinSendMessage").append('<input type="text" id="robinMessageTextAlt" class="c-form-control text-counter-input" name="messageAlt" autocomplete="off" maxlength="140" required="">');
     $("#robinMessageText").css("display", "none");
     // Alternate message input box (doesn't show the channel prefixes)
