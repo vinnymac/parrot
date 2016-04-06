@@ -21,7 +21,10 @@ If you get a bunch of code instead of it installing, you can copy and paste the 
 You can view the source code or contribute at:   
 https://github.com/5a1t/parrot
 
-Public Suggestion / Bug List:
+Feature Requests, Bug Reports, Questions, and Discussion:
+https://www.reddit.com/r/parrot_script/
+
+Old Public Suggestion / Bug List:
 http://piratepad.net/Zg3MJL40Qh
 
 ## Features
@@ -38,8 +41,9 @@ http://piratepad.net/Zg3MJL40Qh
 10. Global username mentions.
 11. Twitch.tv & BTTV emotes!
 12. Tab-Based Chatting!
-13. Sent Message History!
-14. Minified version of the automatic standings board.
+13. Channel exclusion from global chat.
+14. Sent Message History.
+15. Minified version of the automatic standings board.
 
 ## Updates
 
@@ -70,6 +74,8 @@ http://piratepad.net/Zg3MJL40Qh
     2.5: Optimizations and fixes, rearranged settings (dashed, Annon201)
     2.6: Message history w/ up and down arrow (LTAcosta). New title (dashed). Leaderboard reporting (Unimatrix0).
     2.7: BTTV emotes (anadee). Sent message history setting (LTAcosta). Standings view. Reorganized checkboxes.
+    2.8: Channel exclusion filtering (dashed). You can toggle the sidebar to the left or the right (ceetee). Gitter devchat.
+    2.9: Fixes for autocomplete and scrolling.
 
 ## Screenshots
 
