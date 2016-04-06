@@ -10,6 +10,7 @@
 // @grant   GM_getValue
 // @grant   GM_setValue
 // @grant   GM_addStyle
+// @grant   GM_xmlhttpRequest
 // ==/UserScript==
 (function() {
     // hacky solutions
@@ -241,7 +242,12 @@
             $("#settingContainer").before(
                 '<div class="robin-chat--sidebar" style="display:none;" id="standingsContainer">' +
                     '<div class="robin-chat--sidebar-widget robin-chat--vote-widget" id="standingsContent">' +
-                        '<div id="standingsTable"></div>' +
+                        '<div id="standingsTable">' +
+                            '<div style="font-weight: bold; text-align: center;">Reddit leaderboard</div><br/>' +
+                            '<div id="standingsTableReddit"></div><br/>' +
+                            '<br/><div style="font-weight: bold; text-align: center;">MonstrousPeace.com tracking (experimental)</div><br/>' +
+                            '<div id="standingsTableMonstrous"></div>' +
+                        '</div>' +
                         '<a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="_blank"><div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;">Full Leaderboard</div></a>' +
                         '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;margin-left: 0px;" id="closeStandingsBtn">Close Standings</div>' +
                      '</div>' +
@@ -408,6 +414,8 @@
 
     function grabStandings() {
         var standings;
+
+        // Reddit leaderboard
         $.ajax({
             url: 'https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/.rss?limit=1',
             data: {},
@@ -416,24 +424,89 @@
                 var standingsPost = $(data).find("entry > content").first();
                 var decoded = $($('<div/>').html(standingsPost).text()).find('table').first();
                 decoded.find('tr').each(function(i) { var row = $(this).find('td,th');
-                                                    var nameColumn = $(row.get(2));
-                                                    nameColumn.find('a').prop('target','_blank');
-                                                    if (currentRoomName.startsWith(nameColumn.text().substring(0,6))) {
-
-
-                                                        var color = String(settings.leaderboard_current_color).length > 0 ? String(settings.leaderboard_current_color).trim() : '#22bb45';
-
-                                                        row.css('background-color', color);
-                                                    }
-                                                    row.each(function(j) {if (j == 3 || j == 4 || j > 5) {
-                                                        $(this).remove();
-                                                    }});
-                });
-                $("#standingsTable").html(decoded);
+                                                         var nameColumn = $(row.get(2));
+                                                         nameColumn.find('a').prop('target','_blank');
+                                                         if (currentRoomName.startsWith(nameColumn.text().substring(0,6))) {
+                                                             var color = String(settings.leaderboard_current_color).length > 0 ? String(settings.leaderboard_current_color).trim() : '#22bb45';
+                                                             row.css('background-color', color);
+                                                         }
+                                                         row.each(function(j) {if (j == 3 || j == 4 || j > 5) {
+                                                             $(this).remove();
+                                                         }});
+                                                        });
+                        $("#standingsTableReddit").html(decoded);
             },
             dataType: 'xml'
         });
-    }
+
+        // monstrouspeace.com tracker board
+        $.ajax({
+            type: 'GET',
+            url: 'https://monstrouspeace.com/robintracker/json.php',
+            data: { get_param: 'value' },
+            dataType: 'json',
+            xhr: function() { return new GM_XHR(); },
+                success: function(data) {
+                    var decoded =
+                        "<table>\r\n" +
+                        "<thead>\r\n" +
+                        "<tr><th>#</th><th>Participants</th><th>Room Name</th><th>Tier</th></tr>\r\n" +
+                        "</thead>\r\n" +
+                        "<tbody>\r\n";
+
+                    $.each(data, function(index, e) {
+                        decoded += "<tr><td>" + (index+1) + "</td><td>" + e.count + "</td><td>" + e.room + "</td><td>" + e.tier + "</td></tr>\r\n";
+                    });
+                    decoded +=
+                        "</tbody>\r\n" +
+                        "</table>\r\n";
+                    $("#standingsTableMonstrous").html(decoded);
+                }
+        });
+    };
+
+    //
+    // XHR that can cross same origin policy boundaries
+    //
+    function GM_XHR() {
+        this.type = null;
+        this.url = null;
+        this.async = null;
+        this.username = null;
+        this.password = null;
+        this.status = null;
+        this.headers = {};
+        this.readyState = null;
+        this.abort = function() { this.readyState = 0; };
+        this.getAllResponseHeaders = function(name) { return this.readyState != 4 ? "" : this.responseHeaders; };
+        this.getResponseHeader = function(name) {
+            var regexp = new RegExp('^'+name+': (.*)$','im');
+            var match = regexp.exec(this.responseHeaders);
+            if (match) { return match[1]; }
+            return '';
+        };
+        this.open = function(type, url, async, username, password) {
+            this.type = type ? type : null;
+            this.url = url ? url : null;
+            this.async = async ? async : null;
+            this.username = username ? username : null;
+            this.password = password ? password : null;
+            this.readyState = 1;
+        };
+        this.setRequestHeader = function(name, value) { this.headers[name] = value; };
+        this.send = function(data) {
+            this.data = data;
+            var that = this;
+            GM_xmlhttpRequest({
+                method: this.type,
+                url: this.url,
+                headers: this.headers,
+                data: this.data,
+                onload: function(rsp) { for (var k in rsp) { that[k] = rsp[k]; } that.onreadystatechange(); },
+                onerror: function(rsp) { for (var k in rsp) { that[k] = rsp[k]; } }
+            });
+        };
+    };
 
     var standingsInterval = 0;
     function startStandings() {
