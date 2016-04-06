@@ -1307,10 +1307,16 @@
                 }
 
                 // cool we have a message.
-                var $timestamp = $(jq[0] && jq[0].children[0]);
-                var $user = $(jq[0].children && jq[0].children[1]);
-                var thisUser = $(jq[0].children && jq[0].children[1]).text();
-                var $message = $(jq[0].children && jq[0].children[2]);
+                var $timestamp = $(jq[0]).find('.robin-message--timestamp');
+                $(jq[0]).
+                var $user = $(jq[0]).find('.robin--username');
+                if(! $user.length)
+                {
+                    $timestamp.after('<span class="robin-message--from robin--username"></span>');
+                    $user = $(jq[0]).find('.robin--username');
+                }
+                var thisUser = $user.text();
+                var $message = $(jq[0]).find('.robin-message--message');
                 var messageText = $message.text();
 
 		var options = {
@@ -1346,7 +1352,7 @@
                 $message.css("font-family", stylecalc).css("font-size", settings.fontsize+"px");
 
 
-                var is_muted = (mutedList.indexOf(thisUser) >= 0);
+                var is_muted = (thisUser && mutedList.indexOf(thisUser) >= 0);
                 var is_spam = (settings.removeSpam && isBotSpam(messageText));
                 var results_chan = hasChannel(messageText, getChannelString());
 
