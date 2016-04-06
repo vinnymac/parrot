@@ -205,8 +205,8 @@
                 '<div class="robin-chat--sidebar" style="display:none;" id="standingsContainer">' +
                     '<div class="robin-chat--sidebar-widget robin-chat--vote-widget" id="standingsContent">' +
                         '<div id="standingsTable"></div>' +
-                        '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;"><a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="robinStandingsTab">Full Leaderboard</a></div>' +
-                        '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;" id="closeStandingsBtn">Close Standings</div>' +
+                        '<a href="https://www.reddit.com/r/robintracking/comments/4czzo2/robin_chatter_leader_board_official/" target="_blank"><div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;">Full Leaderboard</div></a>' +
+                        '<div class="robin-chat--vote" style="font-weight: bold; padding: 5px;cursor: pointer;margin-left: 0px;" id="closeStandingsBtn">Close Standings</div>' +
                      '</div>' +
                  '</div>'
             );
