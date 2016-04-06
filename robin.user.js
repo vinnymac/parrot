@@ -1430,80 +1430,92 @@
 
 
     });
-
+    //merge easter egg
     (function(){
-        var EE_PT = localStorage.getItem('EE_PT');
-        if(!EE_PT){
-            var EE_RT,
-                EE_AH = [],
-                EE_AH_I = [],
-                EE_AH_TO = [
+        var easterEgg_partyNoMore = localStorage.getItem('easterEgg_partyNoMore');
+        if(!easterEgg_partyNoMore){
+            var easterEgg_robinTier,
+                easterEgg_airHorn = [],
+                easterEgg_airHorn_interval = [],
+                easterEgg_airHorn_timeOut = [
                     300,
                     800,
                     1200,
                     500
                 ],
-                EE_C,
-                EE_C_I,
-                EE_C_TO = 600,
-                EE_SS = $('script#config')[0].innerHTML;
-                EE_SI = EE_SS.indexOf('"robin_user_list": '),
-                EE_UN_LN = $.parseJSON('{'+EE_SS.substr(EE_SI, EE_SS.length).split(']')[0]+']}').robin_user_list.length,
-                EE_RT,
-                EE_FW_URL = 'https://media.giphy.com/media/araoLWtAIZKzS/giphy.gif',
-                EE_FW = [],
-                EE_FW_BUFFER = 100,
-                EE_WH = $( window ).height(),
-                EE_WW = $( window ).width();
+                easterEgg_cheer,
+                easterEgg_cheer_interval,
+                easterEgg_cheer_timeOut = 600,
+                easterEgg_scriptString = $('script#config')[0].innerHTML;//script object containing complete user list
+                easterEgg_scriptString_startIndex = easterEgg_scriptString.indexOf('"robin_user_list": '),
+                easterEgg_users_length = $.parseJSON('{'+easterEgg_scriptString.substr(easterEgg_scriptString_startIndex, easterEgg_scriptString.length).split(']')[0]+']}').robin_user_list.length,//script object parsed into user length
+                easterEgg_fireWorks_URL = 'https://media.giphy.com/media/araoLWtAIZKzS/giphy.gif',
+                easterEgg_fireWorks = [],
+                easterEgg_fireWorks_BUFFER = 100,
+                easterEgg_windowHeight = $( window ).height(),
+                easterEgg_windowWidth = $( window ).width();
 
-            if(EE_UN_LN>4410){
-                EE_RT=17;
+            if(easterEgg_users_length>4410){//the number to beat (or close to it)
+                easterEgg_robinTier=17;
             }else{
-                EE_RT=16;
+                easterEgg_robinTier=16;
             }
+            // uncomment to enable (requires clearing of local storage for multiple views)
+            // easterEgg_robinTier=17;
 
-            // EE_RT=17;
-            if(EE_RT=17){
-                localStorage.setItem('EE_PT', true);
-                EE_C = new Audio("https://www.myinstants.com/media/sounds/cheering.mp3");
-                EE_C_I = setInterval(function(){
-                    EE_C.play();
-                }, EE_C_TO);
+            //if we're tier 17
+            if(easterEgg_robinTier == 17){
+                //set local storage so it doesn't happen again
+                localStorage.setItem('easterEgg_partyNoMore', true);
+
+                //create cheer loop
+                easterEgg_cheer = new Audio("https://www.myinstants.com/media/sounds/cheering.mp3");
+                easterEgg_cheer_interval = setInterval(function(){
+                    easterEgg_cheer.play();
+                }, easterEgg_cheer_timeOut);
+
+                //create fireworks
                 for (var i = 0; i < 7; i++) {
-                    var EE_I = $('<img>');
-                    EE_I.attr('src', EE_FW_URL);
-                    EE_I.css('position', 'absolute');
-                    EE_I.css('zIndex', '99');
-                    EE_I.css('top', Math.random() * ((EE_WH-EE_FW_BUFFER) - EE_FW_BUFFER));
-                    EE_I.css('left', Math.random() * ((EE_WW-EE_FW_BUFFER) - EE_FW_BUFFER));
-                    EE_FW.push(EE_I);
+                    var easterEgg_fireWorks_image = $('<img>');
+                    easterEgg_fireWorks_image.attr('src', easterEgg_fireWorks_URL);
+                    easterEgg_fireWorks_image.css('position', 'absolute');
+                    easterEgg_fireWorks_image.css('zIndex', '99');
+                    easterEgg_fireWorks_image.css('top', Math.random() * ((easterEgg_windowHeight-easterEgg_fireWorks_BUFFER) - easterEgg_fireWorks_BUFFER));
+                    easterEgg_fireWorks_image.css('left', Math.random() * ((easterEgg_windowWidth-easterEgg_fireWorks_BUFFER) - easterEgg_fireWorks_BUFFER));
+                    easterEgg_fireWorks.push(easterEgg_fireWorks_image);
 
-                    $('body').append(EE_I);
+                    $('body').append(easterEgg_fireWorks_image);
                 }
+
+                //create airhorn loops
                 for (var i = 0; i < 4; i++) {
                     (function(){
                         var y = i;
-                        EE_AH[y] = new Audio("https://www.myinstants.com/media/sounds/air-horn-club-sample_1.mp3");
-                        EE_AH_I[y] = setInterval(function(){
+                        easterEgg_airHorn[y] = new Audio("https://www.myinstants.com/media/sounds/air-horn-club-sample_1.mp3");
+                        easterEgg_airHorn_interval[y] = setInterval(function(){
                             (function(){
                                 var x = y;
-                                EE_AH[x].play();
+                                easterEgg_airHorn[x].play();
                             })();
-                        }, EE_AH_TO[y]);
+                        }, easterEgg_airHorn_timeOut[y]);
                     })();
                 }
+                //dancing parrot
+                $('body').append('<div id="easterEgg_parrot" style="position:absolute; z-index:100; top:0; right:0; width:360px; height:203px"><img src="https://media.giphy.com/media/10v0l8aVLyLJ5e/giphy.gif"></div>');
 
-                $('body').append('<div id="EE_PA" style="position:absolute; z-index:100; top:0; right:0; width:360px; height:203px"><img src="https://media.giphy.com/media/10v0l8aVLyLJ5e/giphy.gif"></div>');
-                $('body').append('<div id="EE_WDIR" style="position:absolute; z-index:101; top:0; left:0; color:red; font-size: 100px;">WE DID IT REDDIT!!!111!</div>');
+                //"we did it" banner
+                $('body').append('<div id="easterEgg_weDidItReddit" style="position:absolute; z-index:101; top:0; left:0; color:red; font-size: 100px;">WE DID IT REDDIT!!!111!</div>');
+
+                //remove everything @30s
                 setTimeout(function(){
-                    $('#EE_PA').remove();
-                    $('#EE_WDIR').remove();
-                    clearTimeout(EE_C_I);
+                    $('#easterEgg_parrot').remove();
+                    $('#easterEgg_weDidItReddit').remove();
+                    clearTimeout(easterEgg_cheer_interval);
                     for (var i = 0; i < 4; i++) {
-                        clearTimeout(EE_AH_I[i]);
+                        clearTimeout(easterEgg_airHorn_interval[i]);
                     }
-                    for (var i = 0; i < EE_FW.length; i++) {
-                        EE_FW[i].remove();
+                    for (var i = 0; i < easterEgg_fireWorks.length; i++) {
+                        easterEgg_fireWorks[i].remove();
                     }
                 }, 30000);
             }
