@@ -1001,33 +1001,33 @@
 
     function convertTextToSpecial(messageText, elem)
     {
-                if(urlRegex.test(messageText)) {
-                    urlRegex.lastIndex = 0;
-                    var url = encodeURI(urlRegex.exec(messageText)[0]);
-                    var parsedUrl = url.replace(/^/, "<a target=\"_blank\" href=\"").replace(/$/, "\">"+url+"</a>");
-                    var oldHTML = $(elem).find('.robin-message--message').html();
-                    var newHTML = oldHTML.replace(url, parsedUrl);
-
-                    $(elem).find('.robin-message--message').html(newHTML);
+        urlRegex.lastIndex = 0;
+        if(urlRegex.test(messageText)) {
+            urlRegex.lastIndex = 0;
+            var url = encodeURI(urlRegex.exec(messageText)[0]);
+            var parsedUrl = url.replace(/^/, "<a target=\"_blank\" href=\"").replace(/$/, "\">"+url+"</a>");
+            var oldHTML = $(elem).find('.robin-message--message').html();
+            var newHTML = oldHTML.replace(url, parsedUrl);
+            $(elem).find('.robin-message--message').html(newHTML);
+        }
+        if(settings.twitchEmotes){
+            var split = messageText.split(' ');
+            var changes = false;
+            for (var i=0; i < split.length; i++) {
+                var key = (split[i]).toLowerCase();
+                if(emotes.hasOwnProperty(key)){
+                    split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
+                    changes = true;
                 }
-                if(settings.twitchEmotes){
-                    var split = messageText.split(' ');
-                    var changes = false;
-                    for (var i=0; i < split.length; i++) {
-                        var key = (split[i]).toLowerCase();
-                        if(emotes.hasOwnProperty(key)){
-                            split[i] = "<img src=\"https://static-cdn.jtvnw.net/emoticons/v1/"+emotes[key].image_id+"/1.0\">";
-                            changes = true;
-                        }
-                        if(bttvEmotes.hasOwnProperty(key)){
-                            split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
-                            changes = true;
-                        }
-                    }
-                    if (changes) {
-                        $(elem).find('.robin-message--message').html(split.join(' '));
-                    }
+                if(bttvEmotes.hasOwnProperty(key)){
+                    split[i] = "<img src=\"https://cdn.betterttv.net/emote/"+bttvEmotes[key]+"/1x\">";
+                    changes = true;
                 }
+            }
+            if (changes) {
+                $(elem).find('.robin-message--message').html(split.join(' '));
+            }
+        }
     }
 
     function moveChannelMessage(channelIndex, message, overrideBGColor)
@@ -1321,15 +1321,9 @@
                    }
                 }
 
-                // DO NOT REMOVE THIS LINE
-                // convertTextToSpecial(messageText, jq[0]);
-
                 // Move channel messages to channel tabs
                 if (results_chan.has)
                     moveChannelMessage(results_chan.index, jq[0], userIsMentioned);
-
-                // DO NOT REMOVE THIS LINE
-                convertTextToSpecial(messageText, jq[0]);
 
                 if (selectedChannel >= 0 && thisUser.trim() == '[robin]')
                     moveChannelMessage(selectedChannel, jq[0]);
@@ -1339,11 +1333,12 @@
                     $message.text(messageText);
                 }
 
+                // This needs to be done after any changes to the $message.text() since they will overwrite $message.html() changes
+                convertTextToSpecial(messageText, jq[0]);
+
                 $("<span class='robin-message--from'><strong>" + results_chan.name.lpad("&nbsp", 6) + "</strong></span>").css("font-family", '"Lucida Console", Monaco, monospace')
                     .css("font-size", "12px")
                     .insertAfter($timestamp);
-                // DO NOT REMOVE THIS LINE
-                convertTextToSpecial(messageText, jq[0]);
 
                 findAndHideSpam();
                 doScroll();
