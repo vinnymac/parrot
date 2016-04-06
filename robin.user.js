@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         parrot (color multichat for robin!)
 // @namespace    http://tampermonkey.net/
-// @version      2.82
+// @version      2.83
 // @description  Recreate Slack on top of an 8 day Reddit project.
 // @author       dashed, voltaek, daegalus, vvvv, orangeredstilton, lost_penguin, AviN456, Annon201
 // @include      https://www.reddit.com/robin*
@@ -258,7 +258,7 @@
         },
 
         load: function loadSetting() {
-            var setting = localStorage["robin-grow-settings"];
+            var setting = localStorage.getItem('robin-grow-settings');
 
             try {
                 setting = setting ? JSON.parse(setting) : {};
@@ -273,7 +273,7 @@
         },
 
         save: function saveSetting(settings) {
-            localStorage["robin-grow-settings"] = JSON.stringify(settings);
+            localStorage.setItem('robin-grow-settings', JSON.stringify(settings));
         },
 
         addBool: function addBoolSetting(name, description, defaultSetting, callback) {
