@@ -21,7 +21,10 @@ If you get a bunch of code instead of it installing, you can copy and paste the 
 You can view the source code or contribute at:   
 https://github.com/5a1t/parrot
 
-Public Suggestion / Bug List:
+Feature Requests, Bug Reports, Questions, and Discussion:
+https://www.reddit.com/r/parrot_script/
+
+Old Public Suggestion / Bug List:
 http://piratepad.net/Zg3MJL40Qh
 
 ## Features
