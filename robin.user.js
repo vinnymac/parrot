@@ -1431,6 +1431,85 @@
 
     });
 
+    (function(){
+        var EE_PT = localStorage.getItem('EE_PT');
+        if(!EE_PT){
+            var EE_RT,
+                EE_AH = [],
+                EE_AH_I = [],
+                EE_AH_TO = [
+                    300,
+                    800,
+                    1200,
+                    500
+                ],
+                EE_C,
+                EE_C_I,
+                EE_C_TO = 600,
+                EE_SS = $('script#config')[0].innerHTML;
+                EE_SI = EE_SS.indexOf('"robin_user_list": '),
+                EE_UN_LN = $.parseJSON('{'+EE_SS.substr(EE_SI, EE_SS.length).split(']')[0]+']}').robin_user_list.length,
+                EE_RT,
+                EE_FW_URL = 'https://media.giphy.com/media/araoLWtAIZKzS/giphy.gif',
+                EE_FW = [],
+                EE_FW_BUFFER = 100,
+                EE_WH = $( window ).height(),
+                EE_WW = $( window ).width();
+
+            if(EE_UN_LN>4410){
+                EE_RT=17;
+            }else{
+                EE_RT=16;
+            }
+
+            // EE_RT=17;
+            if(EE_RT=17){
+                localStorage.setItem('EE_PT', true);
+                EE_C = new Audio("https://www.myinstants.com/media/sounds/cheering.mp3");
+                EE_C_I = setInterval(function(){
+                    EE_C.play();
+                }, EE_C_TO);
+                for (var i = 0; i < 7; i++) {
+                    var EE_I = $('<img>');
+                    EE_I.attr('src', EE_FW_URL);
+                    EE_I.css('position', 'absolute');
+                    EE_I.css('zIndex', '99');
+                    EE_I.css('top', Math.random() * ((EE_WH-EE_FW_BUFFER) - EE_FW_BUFFER));
+                    EE_I.css('left', Math.random() * ((EE_WW-EE_FW_BUFFER) - EE_FW_BUFFER));
+                    EE_FW.push(EE_I);
+
+                    $('body').append(EE_I);
+                }
+                for (var i = 0; i < 4; i++) {
+                    (function(){
+                        var y = i;
+                        EE_AH[y] = new Audio("https://www.myinstants.com/media/sounds/air-horn-club-sample_1.mp3");
+                        EE_AH_I[y] = setInterval(function(){
+                            (function(){
+                                var x = y;
+                                EE_AH[x].play();
+                            })();
+                        }, EE_AH_TO[y]);
+                    })();
+                }
+
+                $('body').append('<div id="EE_PA" style="position:absolute; z-index:100; top:0; right:0; width:360px; height:203px"><img src="https://media.giphy.com/media/10v0l8aVLyLJ5e/giphy.gif"></div>');
+                $('body').append('<div id="EE_WDIR" style="position:absolute; z-index:101; top:0; left:0; color:red; font-size: 100px;">WE DID IT REDDIT!!!111!</div>');
+                setTimeout(function(){
+                    $('#EE_PA').remove();
+                    $('#EE_WDIR').remove();
+                    clearTimeout(EE_C_I);
+                    for (var i = 0; i < 4; i++) {
+                        clearTimeout(EE_AH_I[i]);
+                    }
+                    for (var i = 0; i < EE_FW.length; i++) {
+                        EE_FW[i].remove();
+                    }
+                }, 30000);
+            }
+        }
+    })();
+
 GM_addStyle(" \
     .robin--username { \
         cursor: pointer \
