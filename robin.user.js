@@ -108,14 +108,14 @@
         return channelArray;
     }
 
-    function hasChannel(source, shall_trim)
+    function hasChannel(source)
     {
         channel_array = getChannelList();
-        source = shall_trim ? String(source).toLowerCase().trim() : String(source).toLowerCase();
+        source = String(source).toLowerCase();
 
         for (idx = 0; idx < channel_array.length; idx++)
         {
-            var current_chan = shall_trim ? channel_array[idx].trim() : channel_array[idx];
+            var current_chan = channel_array[idx];
 
             if(source.startsWith(current_chan.toLowerCase())) {
                 return {
