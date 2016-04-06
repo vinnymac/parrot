@@ -1110,6 +1110,8 @@
                 }
             });
             $("#robinMessageTextAlt").val(sourceAlt+namePart);
+            sourceAlt=chanName+" "+sourceAlt;
+            $("#robinMessageText").val(sourceAlt+namePart);
             return;
         }
 
