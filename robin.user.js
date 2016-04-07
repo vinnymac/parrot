@@ -698,7 +698,47 @@
             config = JSON.parse(end);
             list = config.robin_user_list;
 
+            var robinUsernames = {};
+            var $robinUsernames = $("#robinUserList").find(".robin--username");
+            $robinUsernames.each(function(i, node) {
+                robinUsernames[node.textContent] = i;
+            });
+
+            function updateRobinUserList(voter) {
+                if ($robinUsernames[robinUsernames[voter.name]]) {
+                    var $userInList = $($robinUsernames[robinUsernames[voter.name]]);
+                    console.log($userInList, voter);
+                    // remove all classes
+                    $userInList
+                      .removeClass('robin--vote-class--increase robin--vote-class--abandon robin--vote-class--novote robin--vote-class--continue robin--presence-class--away robin--presence-class--present');
+
+                    // add presence classes
+                    if (voter.present) {
+                      $userInList.addClass('robin--presence-class--present');
+                    } else {
+                      $userInList.addClass('robin--presence-class--away');
+                    }
+
+                    // add vote classes
+                    switch (voter.vote) {
+                        case "INCREASE":
+                            $userInList.addClass('robin--vote-class--increase');
+                            break;
+                        case "ABANDON":
+                            $userInList.addClass('robin--vote-class--abandon');
+                            break;
+                        case "NOVOTE":
+                            $userInList.addClass('robin--vote-class--novote');
+                            break;
+                        case "CONTINUE":
+                            $userInList.addClass('robin--vote-class--continue');
+                            break;
+                    }
+                }
+            }
+
             var counts = list.reduce(function(counts, voter) {
+                updateRobinUserList(voter);
                 counts[voter.vote] += 1;
                 return counts;
             }, {
