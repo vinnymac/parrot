@@ -616,6 +616,7 @@
     Settings.addBool("alignment", "Right align usernames", true);
     Settings.addInput("username_bg", "Custom background color on usernames", "");
 
+    Settings.addBool("downloadGists", "Download and display gist raw urls", false);
     Settings.addBool("removeRobinMessages", "Hide [robin] messages everywhere", false, setRobinMessageVisibility);
     Settings.addBool("removeChanMessageFromGlobal", "Hide channel messages in Global", false);
     Settings.addBool("filterChannel", "Hide non-channel messages in Global", false, function() { buildDropdown(); });
