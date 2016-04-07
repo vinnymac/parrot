@@ -1199,10 +1199,40 @@
         return $("#robinChatMessageList-ch" + index);
     }
 
+    var secretMessages = {};
+
+    function displayGist(elem, body) {
+      var $message = $(elem).find('.robin-message--message');
+      var oldText = $message.text();
+      $message.text(oldText + " " + body);
+    }
+
+    function downloadIfGist(messageText, elem) {
+        // if (/gist.githubusercontent.com/.test(messageText))
+        //   console.log("Found match!");
+        var documentHash = '9eeec835d9a62c0e2cdde41848b6393422285032';
+        var userHash = '79555c7c76bb5ff09a003972ed74db03';
+        // "https://gist.github.com/vinnymac/79555c7c76bb5ff09a003972ed74db03"
+        // "https://gist.githubusercontent.com/vinnymac/79555c7c76bb5ff09a003972ed74db03/raw/9eeec835d9a62c0e2cdde41848b6393422285032/robin.txt"
+        if (secretMessages[documentHash])
+          displayGist(elem, secretMessages[documentHash]);
+        else
+          var gistURL = 'https://gist.githubusercontent.com/vinnymac/' + userHash + '/raw/' + documentHash + '/robin.txt';
+          $.get(gistURL).done(function(response, xhr) {
+              console.log(response, xhr);
+              // save the response for later
+              secretMessages[documentHash] = response;
+              displayGist(elem, response);
+          }).fail(function(response, xhr) {
+            console.log("Failed to download gist.", response, xhr);
+          });
+    }
+
     function convertTextToSpecial(messageText, elem)
     {
         urlRegex.lastIndex = 0;
         if(urlRegex.test(messageText)) {
+            downloadIfGist(messageText, elem);
             urlRegex.lastIndex = 0;
             var url = encodeURI(urlRegex.exec(messageText)[0]);
             var parsedUrl = url.replace(/^/, "<a target=\"_blank\" href=\"").replace(/$/, "\">"+url+"</a>");
